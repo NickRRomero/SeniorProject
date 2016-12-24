@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SeniorProject</string>
+    <string name="action_settings">Settings</string>
+    <string name="saved">Saved</string>
+    <string name="subscribed">Subcriptions</string>
+    <string name="suggested">Suggested</string>
+</resources>
