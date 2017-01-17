@@ -4,4 +4,27 @@
     <string name="saved">Saved</string>
     <string name="subscribed">Subcriptions</string>
     <string name="suggested">Suggested</string>
+
+    <string name="open_pdf_error">Failed. No application to
+        view the PDF was found on the device</string>
+
+    <string name="subscription">Subscription</string>
+    <string name="filter">Filter</string>
+    <string name="searchDivider">- IN -</string>
+    <string name="searchTerm">Enter a Search Term</string>
+    <string name="pickColor">Choose a Color  :</string>
+    <string name="customDescription">Custom Description (Optional)</string>
+
+    <!--Values used for Filter/Subscription Creation-->
+    <string-array name="filter_subscriptions">
+        <item>Metadata</item>
+        <item>Document Title</item>
+        <item>Author(s)</item>
+        <item>Publication Title</item>
+        <item>Abstract</item>
+        <item>Index Terms</item>
+        <item>DOI</item>
+
+
+    </string-array>
 </resources>
