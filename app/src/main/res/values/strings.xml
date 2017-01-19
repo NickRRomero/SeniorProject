@@ -14,6 +14,8 @@
     <string name="searchTerm">Enter a Search Term</string>
     <string name="pickColor">Choose a Color  :</string>
     <string name="customDescription">Custom Description (Optional)</string>
+    <string name="author_s">Author(s)</string>
+    <string name="title">Title</string>
 
     <!--Values used for Filter/Subscription Creation-->
     <string-array name="filter_subscriptions">

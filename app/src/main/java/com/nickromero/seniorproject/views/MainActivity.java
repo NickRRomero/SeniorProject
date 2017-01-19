@@ -1,5 +1,6 @@
 package com.nickromero.seniorproject.views;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent createSubOrFilter;
 
+    private final int CREATE_ACTIVITY_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
 
-                startActivity(createSubOrFilter);
+                startActivityForResult(createSubOrFilter, CREATE_ACTIVITY_CODE);
 
 
 
@@ -136,4 +139,24 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    /**
+     * Handles any activities returning to any of the fragments
+     * @param requestCode int code used to determine which activity is returning to the main activity
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (CREATE_ACTIVITY_CODE): {
+                if (resultCode == Activity.RESULT_OK) {
+
+                }
+            }
+        }
+    }
+
 }

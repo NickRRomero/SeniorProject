@@ -1,13 +1,7 @@
 package com.nickromero.seniorproject.views.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.pdf.PdfRenderer;
-import android.media.Image;
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +11,6 @@ import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import data.Paper;
@@ -81,10 +72,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
         public PaperHolder(android.content.Context context, View itemView) {
             super(itemView);
 
-            mPaperImage = (ImageView) itemView.findViewById(R.id.image);
+            //mPaperImage = (ImageView) itemView.findViewById(R.id.image);
 
-            mPapersAuthors = (TextView) itemView.findViewById(R.id.info);
-            mPaperTitle = (TextView) itemView.findViewById(R.id.author);
+            mPapersAuthors = (TextView) itemView.findViewById(R.id.authors);
+            mPaperTitle = (TextView) itemView.findViewById(R.id.title);
 
             mSubscriptionHolder = (GridLayout) itemView.findViewById(R.id.colors);
             itemView.setOnClickListener(this);
@@ -99,7 +90,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
 
             mPapersAuthors.setText(paper.getAuthors().toString());
             mPaperTitle.setText(paper.getTitle());
-            mPaperImage.setImageBitmap(paper.getFirstPageBitMap());
+            //mPaperImage.setImageBitmap(paper.getFirstPageBitMap());
         }
 
         @Override
