@@ -33,7 +33,7 @@ public class PDFViewer {
 
     public void openPDF(String pathToFile, String fileName, View view) {
         File pdfToOpen = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                , "pdf.pdf");
+                , fileName);
 
         Log.e("HERE", pdfToOpen.toString());
         Uri path = Uri.fromFile(pdfToOpen);

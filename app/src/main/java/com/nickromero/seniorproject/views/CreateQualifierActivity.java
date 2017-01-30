@@ -3,12 +3,12 @@ package com.nickromero.seniorproject.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,30 +25,61 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by nickromero on 1/9/17.
  */
-public class SubscriptionFilterActivity extends AppCompatActivity {
+public class CreateQualifierActivity extends AppCompatActivity {
 
-    private Spinner mSpinner;
+    /**
+     * Spinner used to hold IEEE categories
+     */
+    private Spinner mCategorySpinner;
 
+    /**
+     * Spinner used to hold colors for qualifiers
+     */
     private Spinner mColorSpinner;
 
+    /**
+     * Subscription radio button
+     */
     private RadioButton mSubscriptionButton;
 
+    /**
+     * Filter radio button
+     */
     private RadioButton mFilterButton;
 
+    /**
+     * Search box where user enters term they would like to search for
+     */
     private EditText mSearchBox;
 
+    /**
+     * Used to hold value from Search box
+     */
     private String sSearchBoxText;
 
+    /**
+     * Represents what qualifier was selected
+     */
     private final String SUBSCRIPTION = "Subscription";
 
+    /**
+     * Represents what qualifier was selected
+     */
     private final String FILTER = "Filter";
 
+    /**
+     * Optional description box for a qualifier
+     */
     private EditText mDescriptionBox;
 
-    private final String[] colorNames = {"red", "pink", "purple", "deepPurple",
-            "indigo", "blue", "lightBlue", "cyan", "teal", "green", "lightGreen", "lime",
-            "yellow", "amber", "orange", "deepOrange", "brown", "grey", "blueGrey", "black"};
+    /**
+     * Color array used to hold values from colors.xml
+     */
+    private int[] mColorNames;
 
+    /**
+     * Fab used by user to signal they are done with creating a qualifier
+     */
     private FloatingActionButton finishedFab;
 
     @Override
@@ -56,20 +87,27 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        setContentView(R.layout.activity_create_subscription_or_filter);
+        setContentView(R.layout.activity_create_qualifier);
 
         Intent intent = getIntent();
 
+        TypedArray typedArrayColors = getResources().obtainTypedArray(R.array.colors);
+        mColorNames = new int[typedArrayColors.length()];
 
+        for (int i = 0; i < typedArrayColors.length(); i++)
+            mColorNames[i] = typedArrayColors.getColor(i, 0);
+        typedArrayColors.recycle();
 
-        mSpinner = (Spinner) findViewById(R.id.spinner);
+        mColorNames = getResources().getIntArray(R.array.colors);
+
+        mCategorySpinner = (Spinner) findViewById(R.id.spinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.filter_subscriptions, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //Create each of the Radio buttons and assign approrpriate listeners
+        //Create each of the Radio buttons and assign appropriate listeners
         mSubscriptionButton = (RadioButton) findViewById(R.id.subscriptionRadioButton);
         mFilterButton = (RadioButton) findViewById(R.id.filterRadioButton);
         mSubscriptionButton.setChecked(false);
@@ -80,12 +118,13 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
         mSearchBox = (EditText) findViewById(R.id.searchBox);
 
 
-        mSpinner.setAdapter(adapter);
+        mCategorySpinner.setAdapter(adapter);
 
         mColorSpinner = (Spinner) findViewById(R.id.colorChooser);
 
+
         mColorSpinner.setAdapter(new SpinnerAdapter(getApplicationContext(),
-                R.layout.spinner_color_chooser, colorNames));
+                R.layout.color_chooser_layout, getResources().getStringArray(R.array.colors)));
 
         finishedFab = (FloatingActionButton) findViewById(R.id.finishedCreateSection);
         finishedFab.setOnClickListener(createFabOnClickListener());
@@ -94,7 +133,6 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
 
     /**
      * Inner Custom Spinner Class used to populate Circluar Color Views in spinner
-     *
      */
     public class SpinnerAdapter extends ArrayAdapter {
 
@@ -113,14 +151,12 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
 
             LayoutInflater inflater = (LayoutInflater) getLayoutInflater();
 
-            View row = inflater.inflate(R.layout.spinner_color_chooser, parent, false);
+            View row = inflater.inflate(R.layout.color_chooser_layout, parent, false);
 
             CircleImageView circle = (CircleImageView) row.findViewById(R.id.colorCircle);
 
 
-            int resID = getResources().getIdentifier(colorNames[position], "color", getPackageName());
-
-            circle.setImageResource(resID);
+            circle.setImageDrawable(new ColorDrawable(mColorNames[position]));
 
 
             return circle;
@@ -144,8 +180,7 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
                 if (whichButton == 0) {
                     mFilterButton.setChecked(false);
                     mSubscriptionButton.setChecked(true);
-                }
-                else {
+                } else {
                     mSubscriptionButton.setChecked(false);
                     mFilterButton.setChecked(true);
                 }
@@ -162,8 +197,7 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
 
                 if (successfulEntry) {
                     prepareCreatedSubscriptionOrFilterBundle();
-                }
-                else {
+                } else {
                     Snackbar.make(view, "Please fill in all required fields", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
@@ -174,6 +208,7 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
 
     /**
      * Helper method to ensure a user filled in fields correctly
+     *
      * @return
      */
     private boolean validateFields() {
@@ -201,22 +236,19 @@ public class SubscriptionFilterActivity extends AppCompatActivity {
 
         if (mSubscriptionButton.isChecked()) {
             typeOfModel = SUBSCRIPTION;
-        }
-        else {
+        } else {
             typeOfModel = FILTER;
         }
-
 
 
         resultSubOrFilter.putExtra("type", typeOfModel);
 
         resultSubOrFilter.putExtra("search_term", sSearchBoxText);
-        resultSubOrFilter.putExtra("search_field", mSpinner.getSelectedItem().toString());
-        resultSubOrFilter.putExtra("color", colorNames[mColorSpinner.getSelectedItemPosition()]);
+        resultSubOrFilter.putExtra("search_field", mCategorySpinner.getSelectedItem().toString());
+        resultSubOrFilter.putExtra("color", mColorNames[mColorSpinner.getSelectedItemPosition()]);
 
-        if (customDescription.isEmpty() || customDescription.length() == 0
-                || customDescription.equals("") || customDescription == null)
-            resultSubOrFilter.putExtra("custom_description", customDescription);
+
+        resultSubOrFilter.putExtra("custom_description", customDescription);
 
         setResult(Activity.RESULT_OK, resultSubOrFilter);
 

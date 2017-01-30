@@ -1,39 +1,32 @@
 package com.nickromero.seniorproject.views;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.GridLayout;
-import android.widget.ImageView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.nickromero.seniorproject.views.adapters.QualifierAdapter;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import com.nickromero.seniorproject.R;
 
-import java.io.File;
+import java.util.ArrayList;
+
+import data.Qualifier;
+import data.Subscription;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,18 +34,25 @@ public class MainActivity extends AppCompatActivity {
 
     private final int CREATE_ACTIVITY_CODE = 1;
 
+    private ArrayList<Qualifier> mQualifiers;
+
+    private GridView mGridView;
+
+    private String[] colorArray;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        createSubOrFilter = new Intent(this, SubscriptionFilterActivity.class);
+        createSubOrFilter = new Intent(this, CreateQualifierActivity.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+
+        colorArray = getResources().getStringArray(R.array.colors);
+
 
         int i = 0;
 
-//        final ImageView icon = (ImageView) findViewById(R.id.expandIcon);
 
         SlidingUpPanelLayout panel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanel);
 
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout main = (LinearLayout) findViewById(R.id.saved_fragment);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,37 +84,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-/*
-        panel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                icon.startAnimation(rotate);
+        //Build GridView to hold future created subscriptions
 
-            }
-        });*/
-
-        /*
-        fina
-        l Animation bottomUp = AnimationUtils.loadAnimation(this, R.anim.bottom_up);
-
-        final Animation bottomDown = AnimationUtils.loadAnimation(this, R.anim.bottom_down);
-
-       /* final RelativeLayout hiddenPanel = (RelativeLayout) findViewById(R.id.subscriptionDrawer);
-
-        hiddenPanel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (hiddenPanel.getVisibility() == View.VISIBLE) {
-                    hiddenPanel.startAnimation(bottomDown);
-                    //hiddenPanel.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    hiddenPanel.setVisibility(View.VISIBLE);
-                    hiddenPanel.startAnimation(bottomUp);
-
-                }
-            }
-        });*/
+        mQualifiers = new ArrayList<>();
+        initData();
+        mGridView = (GridView) findViewById(R.id.createdSubscriptions);
+        mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
 
     }
 
@@ -153,10 +129,31 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case (CREATE_ACTIVITY_CODE): {
                 if (resultCode == Activity.RESULT_OK) {
+                    mGridView.invalidate();
+                    Qualifier newQualifer;
+                    newQualifer = new Subscription(data.getStringExtra("search_field"),
+                                                   data.getStringExtra("search_term"),
+                                                   data.getIntExtra("color", 0));
+                    if (data.getStringExtra("custom_description") != null)
+                        newQualifer.setDescription(data.getStringExtra("custom_description"));
+
+                    mQualifiers.add(newQualifer);
+                    ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
 
                 }
             }
         }
+    }
+
+    /**
+     * Used for demo purposes to initialize a qualifier list
+     */
+    public void initData() {
+
+        mQualifiers.add(new Subscription("Abstract", "Security", Color.GREEN));
+        mQualifiers.add(new Subscription("Author", "Andrea Zanella", Color.RED));
+        mQualifiers.add(new Subscription("Title", "5G Network", Color.YELLOW));
+
     }
 
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nickromero on 1/3/17.
@@ -16,25 +17,58 @@ import java.util.ArrayList;
 
 public class Paper {
 
-    //Title of a Paper
+    /**
+     * Title of a paper
+     */
     private String mPaperTitle;
 
-    //List of all the authors for a paper
+    /**
+     * List containing all authors of a paper
+     */
     private ArrayList<String> mPaperAuthors;
 
-    //Saved location of paper.. Maybe not needed?
+    /**
+     * Absolute path to where a file is saved on the device
+     */
     private String mPathToFile;
 
-    //Saved name of pdf. Should contain .pdf extension
+    /**
+     * Name of the downloaded file
+     */
     private String mFileName;
 
-    //Bitmap to hold the intial page of the paper
+    /**
+     * Possible bitmap to hold the image of a paper
+     */
     private Bitmap mFirstPageBitMap;
 
-    //Reference to the last read page a user was on
-    //may not work with the way I'm opening pdfs
+    /**
+     * Reference to the last page read by the user. Useful when
+     * returning to a paper.
+     */
     private int mLastPageRead;
 
+    /**
+     * This list holds any subscriptions that were used to recommend this paper.
+     * A larger list of subscriptions associated with any paper implies a higher
+     * recommendation for the paper/
+     */
+    private List<Subscription> listOfSubscriptions;
+
+    /**
+     * Holder for a papers abstract. Can be retrieved with a paper's metadata
+     */
+    private String sAbstract = "Fake abstract";
+
+    private ArrayList<Qualifier> myQualifers;
+
+    /**
+     * Paper constructor. Called whenever a paper is saved to the device.
+     * @param title String title of a paper
+     * @param authors Collection of strings representing author names
+     * @param downloadLocation String representation of a file's downloaded location
+     * @param fileName String name of the downloaded file
+     */
     public Paper(String title, ArrayList<String> authors, String downloadLocation, String fileName) {
 
         mPaperTitle = title;
@@ -42,11 +76,13 @@ public class Paper {
         mPathToFile = downloadLocation;
         mFileName = fileName;
         mLastPageRead = 0;
+        myQualifers = new ArrayList<>();
 
         File pdfToRender = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                , "pdf.pdf");
+                , fileName);
         ParcelFileDescriptor fileDescriptor;
 
+        /*
         try {
             fileDescriptor = ParcelFileDescriptor.open(pdfToRender,
                     ParcelFileDescriptor.MODE_READ_WRITE);
@@ -67,9 +103,25 @@ public class Paper {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
+    }
+
+    /**
+     * Called whenever a paper is retrieved from the database using a created qualifier
+     * @param newQualifier
+     */
+    public void addQualifier(Qualifier newQualifier) {
+        myQualifers.add(newQualifier);
+    }
+
+    /**
+     * Getter is used when displaying a paper on the screen.
+     * @return any qualifiers associated with the paper
+     */
+    public ArrayList<Qualifier> getQualifiers() {
+        return myQualifers;
     }
 
     public String getTitle() {
@@ -98,5 +150,13 @@ public class Paper {
 
     public void setLastPageRead(int lastPageRead) {
         mLastPageRead = lastPageRead;
+    }
+
+    public void setAbstract(String paperAbstract) {
+        sAbstract = paperAbstract;
+    }
+
+    public String getAbstract() {
+        return sAbstract;
     }
 }
