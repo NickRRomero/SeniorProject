@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.FloatingActionButton
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="64dp"
+    android:id="@+id/introFabConfirm"
+    android:layout_height="64dp"
+    android:src="@drawable/ic_arrow_forward_white_36dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_margin="32dp">
+
+</android.support.design.widget.FloatingActionButton>

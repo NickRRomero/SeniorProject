@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by nickromero on 1/3/17.
  */
 
-public class Paper {
+public class Paper implements Serializable{
 
     /**
      * Title of a paper

@@ -1,21 +1,15 @@
 package com.nickromero.seniorproject.views.adapters;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.graphics.Color;
+import android.support.v4.app.DialogFragment;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
@@ -32,21 +26,22 @@ import utilities.PDFViewer;
  * Created by nickromero on 1/3/17.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperHolder> {
+public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder> {
 
     private ArrayList<Paper> mPapers;
 
 
-    private final int mCardViewToInflate;
+    private int mCardViewToInflate;
 
-    private static Fragment mParentFragment;
+    private Fragment mParentFragment;
+
 
     /**
-     *
      * @param papers
      */
-    public RecyclerAdapter(ArrayList<Paper> papers, int cardViewToInflate, Fragment parentFragment) {
+    public PaperAdapter(ArrayList<Paper> papers, int cardViewToInflate, Fragment parentFragment) {
         mPapers = papers;
+
         mCardViewToInflate = cardViewToInflate;
         mParentFragment = parentFragment;
     }
@@ -63,24 +58,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
     public void onBindViewHolder(PaperHolder holder, int position) {
         Paper paper = mPapers.get(position);
 
-        holder.bindPaper(paper);
+
+        holder.bindPaper(paper, position);
     }
 
+    public void removeItem(int position) {
+        mPapers.remove(position);
+        notifyItemRemoved(position);
+    }
 
+    public void addItem(Paper paper) {
+        mPapers.add(paper);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
         return mPapers.size();
     }
 
-    public static class PaperHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PaperHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context mContext;
 
         private Paper mPaper;
 
-        private int [] mColorNames;
-
+        private int[] mColorNames;
 
 
         //Should hold the title of a paper
@@ -95,9 +98,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
 
         private DialogFragment mPaperDialogFragment;
 
+        private int mPapersPosition;
+
         public PaperHolder(android.content.Context context, View itemView) {
             super(itemView);
-
 
 
             mPapersAuthors = (LinearLayout) itemView.findViewById(R.id.authors);
@@ -107,11 +111,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
             mSubscriptionHolder.setColumnCount(4);
             mSubscriptionHolder.setRowCount(2);
             itemView.setOnClickListener(this);
+            System.out.println(mCardViewToInflate);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    mPaperDialogFragment = new PaperDialogFragment().newInstance(0, mParentFragment, mPaper);
-                    mPaperDialogFragment.show(mParentFragment.getActivity().getFragmentManager(), "dialog");
+                    mPaperDialogFragment = new PaperDialogFragment().newInstance(mCardViewToInflate, mParentFragment, mPaper,
+                            mPapersPosition);
+                    mPaperDialogFragment.setTargetFragment(mParentFragment, 6);
+                    mPaperDialogFragment.show(mParentFragment.getFragmentManager(), "dialog");
+                    //mPaperDialogFragment.show(mParentFragment.getActivity().getFragmentManager(), "dialog");
                     return true;
                 }
             });
@@ -122,24 +130,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.PaperH
 
         }
 
-        public void bindPaper(Paper paper) {
+        public void bindPaper(Paper paper, int position) {
             mPaper = paper;
+            mPapersPosition = position;
+
 
 
             int idarr[] = {R.id.author1, R.id.author2, R.id.author3};
+            int i = 0;
 
-            for (int i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
-                ((TextView )mPapersAuthors.findViewById(idarr[i]))
+            for (i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
+                ((TextView) mPapersAuthors.findViewById(idarr[i]))
                         .setText(mPaper.getAuthors().get(i));
             }
-
-
+            while (i < 3) {
+                mPapersAuthors.removeView(
+                        (mPapersAuthors).findViewById(idarr[i]));
+                i++;
+            }
 
 
             mPaperTitle.setText(paper.getTitle());
             mPaperTitle.setTag(mPaper.getFileName().toString());
 
-            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ArrayList<Qualifier> qualifiers = mPaper.getQualifiers();
             if (qualifiers.size() > 0) {
                 for (Qualifier qualifier : qualifiers) {

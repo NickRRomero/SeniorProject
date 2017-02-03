@@ -153,6 +153,12 @@ public class MainActivity extends AppCompatActivity {
         mQualifiers.add(new Subscription("Abstract", "Security", Color.GREEN));
         mQualifiers.add(new Subscription("Author", "Andrea Zanella", Color.RED));
         mQualifiers.add(new Subscription("Title", "5G Network", Color.YELLOW));
+        mQualifiers.add(new Subscription("Title", "Smart", Color.BLACK));
+        mQualifiers.add(new Subscription("Abstract", "Neutrinos", Color.BLUE));
+        mQualifiers.add(new Subscription("Title", "Supernova", Color.CYAN));
+        mQualifiers.add(new Subscription("Title", "Neutrinos", Color.LTGRAY));
+        mQualifiers.add(new Subscription("Year", "1999", Color.MAGENTA));
+        mQualifiers.add(new Subscription("Author", "Petr Vogel", Color.DKGRAY));
 
     }
 

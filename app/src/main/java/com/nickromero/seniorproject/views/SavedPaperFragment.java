@@ -1,5 +1,6 @@
 package com.nickromero.seniorproject.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nickromero.seniorproject.R;
-import com.nickromero.seniorproject.views.adapters.RecyclerAdapter;
+import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class SavedPaperFragment extends Fragment {
 
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
 
-    private RecyclerAdapter mAdapter;
+    private PaperAdapter mAdapter;
 
     private final int SPAN_COUNT = 3;
 
@@ -53,7 +54,6 @@ public class SavedPaperFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
         initData();//Build the card views
 
 
@@ -65,19 +65,15 @@ public class SavedPaperFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.saved_fragment_view, container, false);
 
 
-
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSavedFragment);
 
-        int numberOfColumns = ColumnCountingUtility.calculateNoOfColumns(getContext());
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
 
-        mAdapter = new RecyclerAdapter(mPapersList, 0, this);
-
-
+        mAdapter = new PaperAdapter(mPapersList, 0, this);
 
 
         mRecyclerView.setAdapter(mAdapter);
@@ -85,7 +81,6 @@ public class SavedPaperFragment extends Fragment {
         return rootView;
 
     }
-
 
 
     @Override
@@ -98,26 +93,30 @@ public class SavedPaperFragment extends Fragment {
         mPapersList = new ArrayList<>();
 
 
-
-
-
         Paper paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
                 new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
         paper5.addQualifier(new Subscription("Title", "5G Network", Color.YELLOW));
 
         mPapersList.add(paper5);
 
-        mPapersList.add(new Paper("Design of End-Effectors " +
+
+        Paper chemPaper = new Paper("Design of End-Effectors " +
                 "for a Chemistry Automation Plant",
                 new ArrayList<String>(Arrays.asList("Akshaya Kumar", "Kamila Pillearachichige", "Hamid Sharifi",
-                        "Ben Shaw", "Frazer K. Noble")), "url", "chemistry.pdf"));
+                        "Ben Shaw", "Frazer K. Noble")), "url", "chemistry.pdf");
+        mPapersList.add(chemPaper);
+        chemPaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
 
-        mPapersList.add(new Paper("Does Gamification Work? — A Literature Review of Empirical Studies on Gamification",
-                new ArrayList<String>(Arrays.asList("Juho Hamari", "Jonna Koivisto", "Harri Sarsa")), "url", "gamification.pdf"));
+
+        Paper gamePaper = new Paper("Does Gamification Work? — A Literature Review of Empirical Studies on Gamification",
+                new ArrayList<String>(Arrays.asList("Juho Hamari", "Jonna Koivisto", "Harri Sarsa")), "url", "gamification.pdf");
+
+        mPapersList.add(gamePaper);
+        gamePaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
 
         mPapersList.add(new Paper("The Internet of Things for Health Care: A Comprehensive Survey",
                 new ArrayList<String>(Arrays.asList("S. M. RIAZUL ISLAM", "DAEHAN KWAK", "MD. HUMAUN KABIR", "MAHMUD HOSSAIN"
-                , "KYUNG-SUP KWAK")), "url", "healthcare.pdf"));
+                        , "KYUNG-SUP KWAK")), "url", "healthcare.pdf"));
 
 
         Paper andPaper = new Paper("Internet of Things for Smart Cities",
@@ -125,11 +124,8 @@ public class SavedPaperFragment extends Fragment {
                         , "Lorenzo Vangelista", "Michele Zorzi")), "url", "iot.pdf");
 
         andPaper.addQualifier(new Subscription("Author", "Andrea Zanella", Color.RED));
-
+        andPaper.addQualifier(new Subscription("Title", "Smart", Color.BLACK));
         mPapersList.add(andPaper);
-
-
-
 
 
         Paper securityPaper = new Paper("Information Security in Big Data: Privacy and Data Mining",
@@ -140,7 +136,6 @@ public class SavedPaperFragment extends Fragment {
         mPapersList.add(securityPaper);
 
 
-
         mPapersList.add(new Paper("Predicting the Future With Social Media",
                 new ArrayList<String>(Arrays.asList("Sitaram Asur", "Bernardo A. Huberman")), "url", "mediafuture.pdf"));
 
@@ -148,9 +143,21 @@ public class SavedPaperFragment extends Fragment {
                 new ArrayList<String>(Arrays.asList("ANTON AKUSOK", "KAJ-MIKAEL BJÖRK", "YOAN MICHE", "AMAURY LENDASSE")), "url", "performance.pdf"));
 
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
+        if (requestCode == 5)
+            mAdapter.removeItem(data.getIntExtra("position", -1));
 
+        // switch (requestCode) {
+        //    case 5:
+        //mPapersList.remove(data.getIntExtra("position", 0));
+        //mAdapter.notifyDataSetChanged();
+        //      break;
+        //}
     }
 
 }

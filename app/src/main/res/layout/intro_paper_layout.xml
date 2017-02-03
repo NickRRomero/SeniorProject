@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content" android:layout_height="140dp"
+    android:id="@+id/introPaperEntryLayout"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="20dp"
+    android:padding="5dp"
+    >
+
+    <EditText
+        android:id="@+id/paperEntryEditText"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Enter Paper Title"
+        android:background="@color/colorDivider"
+        android:padding="16dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/nextPaperFab"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:orientation="vertical"
+        android:src="@drawable/plus"
+        android:layout_alignBaseline="@id/paperEntryEditText"
+        android:layout_alignEnd="@id/paperEntryEditText"
+        android:layout_marginEnd="16dp">
+
+    </android.support.design.widget.FloatingActionButton>
+
+</RelativeLayout>
