@@ -19,6 +19,7 @@ import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 import com.nickromero.seniorproject.views.adapters.QualifierAdapter;
 
 import com.nickromero.seniorproject.R;
+import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
                         1,
                         mPaperFragments.mSubscribedFragment), PaperType.SUBSCRIBED);
 
+        mPaperController.setAdapter(new SuggestedPaperAdapter(initSuggestedData(), mPaperFragments.mSuggestedFragment));
+
         mPaperController.setFragment(mPaperFragments.mSavedFragment, PaperType.SAVED);
         mPaperController.setFragment(mPaperFragments.mSubscribedFragment, PaperType.SUBSCRIBED);
-
+        mPaperController.setFragment(mPaperFragments.mSuggestedFragment, PaperType.SUGGESTED);
 
 //        mPaperController.attachAdapterToView(PaperType.SAVED);
   //      mPaperController.attachAdapterToView(PaperType.SUBSCRIBED);
@@ -248,7 +251,67 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<Paper> initSuggestedData() {
-        return null;
+        ArrayList<Paper> mPapersList = new ArrayList<>();
+        Paper paper5;
+
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+
+
+        mPapersList.add(paper5);
+
+
+        return mPapersList;
     }
 
 }

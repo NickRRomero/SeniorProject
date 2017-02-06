@@ -3,6 +3,7 @@ package com.nickromero.seniorproject.views;
 import android.support.v4.app.Fragment;
 
 import com.nickromero.seniorproject.views.adapters.PaperAdapter;
+import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 
 import data.Paper;
 
@@ -14,7 +15,7 @@ public class PaperController {
 
     static PaperAdapter mSavedAdapter;
     static PaperAdapter mSubscribedAdapter;
-    static PaperAdapter mSuggestedAdapter;
+    static SuggestedPaperAdapter mSuggestedAdapter;
 
     static Fragment mSavedFragment;
     static Fragment mSubscribedFragment;
@@ -45,10 +46,11 @@ public class PaperController {
             case SUBSCRIBED:
                 mSubscribedAdapter = adapter;
                 break;
-            case SUGGESTED:
-                mSuggestedAdapter = adapter;
-                break;
         }
+    }
+
+    public void setAdapter(SuggestedPaperAdapter adapter) {
+        mSuggestedAdapter = adapter;
     }
 
     public void setFragment(Fragment fragment, PaperType which) {

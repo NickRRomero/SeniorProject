@@ -69,14 +69,11 @@ public class SavedPaperFragment extends Fragment {
 
         mRecyclerView.setAdapter(PaperController.getInstance().mSavedAdapter);
 
-       // mAdapter = new PaperAdapter(mPapersList, 0, this);
-
-
-        //mRecyclerView.setAdapter(mAdapter);
-
         return rootView;
 
     }
+
+
 
 
     @Override
