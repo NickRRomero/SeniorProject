@@ -139,6 +139,8 @@ public class PaperDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                if (mWhichDialogToShow == 1)
+                    deletePaperDialogClick();
             }
         });
 
@@ -147,28 +149,29 @@ public class PaperDialogFragment extends DialogFragment {
 
     private void addPaperToSavedSectionDialogClick() {
         Intent returnIntent = new Intent().putExtra("position", mPaperPosition);
-        Bundle paperBundle = new Bundle();
-        paperBundle.putSerializable("paper", mPaperPosition);
-        returnIntent.putExtra("paper", paperBundle);
+
+        //Bundle paperBundle = new Bundle();
+        //paperBundle.putSerializable("paper", mPaperPosition);
+        //returnIntent.putExtra("paper", paperBundle);
+
         getTargetFragment().onActivityResult(getTargetRequestCode(), 6, returnIntent);
         dismiss();
     }
 
     private void deletePaperDialogClick() {
-        System.out.println("POSITION" + mPaperPosition);
+
         switch (mWhichDialogToShow) {
 
             //Deleting a paper from the SAVED paper fragment
             case 0:
-                Intent returnIntent = new Intent().putExtra("position", mPaperPosition);
-                getTargetFragment().onActivityResult(getTargetRequestCode(), 5, returnIntent);
-                dismiss();
-
-                break;
-
-            //Removing a paper from the Subscribed paper fragment
             case 1:
+                Intent returnIntent = new Intent().putExtra("position", mPaperPosition);
+                getTargetFragment().onActivityResult(getTargetRequestCode(),
+                        PaperRequestCodes.DELETE_PAPER.getVal(),
+                        returnIntent);
+                dismiss();
                 break;
+
 
         }
     }

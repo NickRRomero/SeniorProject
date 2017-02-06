@@ -47,20 +47,12 @@ public class SubscribedPaperFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-        initData();//Build the card views
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.subscribed_fragment_view, container, false);
-
-
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSubscribedFragment);
 
@@ -70,35 +62,31 @@ public class SubscribedPaperFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-
-        mAdapter = new PaperAdapter(mPapersList, 1, this);
-
-
-
-
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(PaperController.getInstance().mSubscribedAdapter);
 
         return rootView;
     }
 
-    private void initData() {
-        mPapersList = new ArrayList<>();
-
-
-        Paper spacePaper = new Paper("WHAT MIGHT WE LEARN FROM A FUTURE SUPERNOVA NEUTRINO SIGNAL?",
-                new ArrayList<String>(Arrays.asList("PETR VOGEL")), "url", "space.pdf");
-        mPapersList.add(spacePaper);
-
-        spacePaper.addQualifier(new Subscription("Abstract", "Neutrinos", Color.BLUE));
-        spacePaper.addQualifier(new Subscription("Title", "Supernova", Color.CYAN));
-        spacePaper.addQualifier(new Subscription("Title", "Neutrinos", Color.LTGRAY));
-        spacePaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
-        spacePaper.addQualifier(new Subscription("Author", "Petr Vogel", Color.DKGRAY));
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 6)
-            System.out.println("HERe");
+
+        if (resultCode == PaperRequestCodes.MOVE_TO_SAVED.getVal()) {
+
+
+            PaperController.getInstance().addToSavedAdapter(
+                    data.getIntExtra("position", -1),
+                    PaperType.SUBSCRIBED);
+
+        }
+        else if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
+            PaperController.getInstance().removeFromAdapter(data.getIntExtra("position", -1),
+                    PaperType.SUBSCRIBED);
+        }
+    }
+
+    public void attachAdapter(PaperAdapter adapter) {
+        mRecyclerView.setAdapter(adapter);
+
     }
 }

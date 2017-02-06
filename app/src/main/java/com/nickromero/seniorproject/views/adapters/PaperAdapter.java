@@ -69,7 +69,13 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
 
     public void addItem(Paper paper) {
         mPapers.add(paper);
-        notifyDataSetChanged();
+        notifyItemInserted(mPapers.size() - 1);
+       // notifyDataSetChanged();
+    }
+
+    public Paper getItem(int position) {
+
+        return mPapers.get(position);
     }
 
     @Override
@@ -111,15 +117,15 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
             mSubscriptionHolder.setColumnCount(4);
             mSubscriptionHolder.setRowCount(2);
             itemView.setOnClickListener(this);
-            System.out.println(mCardViewToInflate);
+
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     mPaperDialogFragment = new PaperDialogFragment().newInstance(mCardViewToInflate, mParentFragment, mPaper,
                             mPapersPosition);
+                    System.out.println("CHECKER : " + mParentFragment);
                     mPaperDialogFragment.setTargetFragment(mParentFragment, 6);
                     mPaperDialogFragment.show(mParentFragment.getFragmentManager(), "dialog");
-                    //mPaperDialogFragment.show(mParentFragment.getActivity().getFragmentManager(), "dialog");
                     return true;
                 }
             });
@@ -137,7 +143,7 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
 
 
             int idarr[] = {R.id.author1, R.id.author2, R.id.author3};
-            int i = 0;
+            int i;
 
             for (i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
                 ((TextView) mPapersAuthors.findViewById(idarr[i]))
@@ -151,7 +157,7 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
 
 
             mPaperTitle.setText(paper.getTitle());
-            mPaperTitle.setTag(mPaper.getFileName().toString());
+            mPaperTitle.setTag(mPaper.getFileName());
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ArrayList<Qualifier> qualifiers = mPaper.getQualifiers();

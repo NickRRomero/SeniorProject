@@ -15,20 +15,29 @@ public class PaperFragment extends FragmentPagerAdapter {
 
     final private Context mContext;
 
+    public SavedPaperFragment mSavedFragment;
+    public SubscribedPaperFragment mSubscribedFragment;
+    public SuggestedPaperFragment mSuggestedFragment;
+
+
     public PaperFragment(android.support.v4.app.FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
+
+        mSavedFragment = new SavedPaperFragment();
+        mSubscribedFragment = new SubscribedPaperFragment();
+        mSuggestedFragment = new SuggestedPaperFragment();
 
     }
 
     @Override
     public android.support.v4.app.Fragment getItem(int position) {
         if (position == 0)
-            return new SavedPaperFragment();
+            return mSavedFragment;
         else if (position == 1)
-            return new SubscribedPaperFragment();
+            return mSubscribedFragment;
         else
-            return new SuggestedPaperFragment();
+            return mSuggestedFragment;
     }
 
 
