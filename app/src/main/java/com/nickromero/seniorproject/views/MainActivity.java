@@ -254,62 +254,11 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Paper> mPapersList = new ArrayList<>();
         Paper paper5;
 
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-        paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-
-
-        mPapersList.add(paper5);
-
+        for (int i = 0; i < 20; i++) {
+            paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
+                    new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
+            mPapersList.add(paper5);
+        }
 
         return mPapersList;
     }

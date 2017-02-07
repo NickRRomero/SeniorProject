@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import data.Paper;
@@ -61,6 +63,7 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
         private final TextView mPapersAuthors;
         private final TextView mPaperTitle;
+        private final TextView mSimilarityScore;
         private final Context mContext;
         private Paper mPaper;
         private int mPapersPosition;
@@ -70,7 +73,7 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
             mPapersAuthors = (TextView) itemView.findViewById(R.id.suggested_paper_authors);
             mPaperTitle = (TextView) itemView.findViewById(R.id.suggested_paper_title);
-
+            mSimilarityScore = (TextView) itemView.findViewById(R.id.suggested_paper_similarity_score);
             mContext = context;
 
         }
@@ -78,12 +81,16 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
         public void bindPaper(Paper paper, int position) {
             mPaper = paper;
             mPapersPosition = position;
+            mPapersAuthors.setText("");
 
+            /*Dynamically add authors
             for (int i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
                 String oldText = mPapersAuthors.getText().toString();
-                mPapersAuthors.setText(oldText + ", ");
-            }
 
+                mPapersAuthors.setText(oldText + ", ");
+            }*/
+            mPapersAuthors.setText(mPaper.getAuthors().get(0).toString());
+            mSimilarityScore.setText("Score:\n" + (Math.abs(position - 20)));
             mPaperTitle.setText(mPaper.getTitle());
 
         }
