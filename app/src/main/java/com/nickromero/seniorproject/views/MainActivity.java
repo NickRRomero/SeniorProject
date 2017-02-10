@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -28,7 +30,7 @@ import data.Qualifier;
 import data.Subscription;
 import data.enums.PaperType;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements QualifierDialogInterface{
 
     private Intent createSubOrFilter;
 
@@ -58,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
+        final QualifierDialogFragment qualifierDialog = QualifierDialogFragment.newInstance(this);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(createSubOrFilter, CREATE_ACTIVITY_CODE);
+
+
+                qualifierDialog.show(getFragmentManager(), "dialog");
             }
         });
 
@@ -130,34 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Handles any activities returning to any of the fragments
-     *
-     * @param requestCode int code used to determine which activity is returning to the main activity
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case (CREATE_ACTIVITY_CODE): {
-                if (resultCode == Activity.RESULT_OK) {
-                    mGridView.invalidate();
-                    Qualifier newQualifer;
-                    newQualifer = new Subscription(data.getStringExtra("search_field"),
-                            data.getStringExtra("search_term"),
-                            data.getIntExtra("color", 0));
-                    if (data.getStringExtra("custom_description") != null)
-                        newQualifer.setDescription(data.getStringExtra("custom_description"));
 
-                    mQualifiers.add(newQualifer);
-                    ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
-
-                }
-            }
-        }
-    }
 
     /**
      * Used for demo purposes to initialize a qualifier list
@@ -261,4 +238,17 @@ public class MainActivity extends AppCompatActivity {
         return mPapersList;
     }
 
+    @Override
+    public void onFinishedButtonClicked(String type, String searchField, String searchTerm,
+                                        String description, int color) {
+        mGridView.invalidate();
+        Qualifier newQualifier;
+        newQualifier = new Subscription(searchField,searchTerm,
+                color);
+        if (description != null)
+            newQualifier.setDescription(description);
+
+        mQualifiers.add(newQualifier);
+        ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+    }
 }

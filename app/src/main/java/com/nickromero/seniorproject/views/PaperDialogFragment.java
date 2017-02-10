@@ -146,11 +146,6 @@ public class PaperDialogFragment extends DialogFragment {
 
     private void addPaperToSavedSectionDialogClick() {
         Intent returnIntent = new Intent().putExtra("position", mPaperPosition);
-
-        //Bundle paperBundle = new Bundle();
-        //paperBundle.putSerializable("paper", mPaperPosition);
-        //returnIntent.putExtra("paper", paperBundle);
-
         getTargetFragment().onActivityResult(getTargetRequestCode(), 6, returnIntent);
         dismiss();
     }

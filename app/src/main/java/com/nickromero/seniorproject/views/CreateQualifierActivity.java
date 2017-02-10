@@ -126,7 +126,7 @@ public class CreateQualifierActivity extends AppCompatActivity {
         mColorSpinner.setAdapter(new SpinnerAdapter(getApplicationContext(),
                 R.layout.color_chooser_layout, getResources().getStringArray(R.array.colors)));
 
-        finishedFab = (FloatingActionButton) findViewById(R.id.finishedCreateSection);
+        //finishedFab = (FloatingActionButton) findViewById(R.id.finishedCreateSection);
         finishedFab.setOnClickListener(createFabOnClickListener());
     }
 
