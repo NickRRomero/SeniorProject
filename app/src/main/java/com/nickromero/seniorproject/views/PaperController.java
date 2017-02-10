@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 
-import data.Paper;
+import data.enums.PaperType;
 
 /**
  * Created by nickromero on 2/5/17.

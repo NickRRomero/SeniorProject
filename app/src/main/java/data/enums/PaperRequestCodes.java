@@ -1,4 +1,4 @@
-package com.nickromero.seniorproject.views;
+package data.enums;
 
 /**
  * Created by nickromero on 2/5/17.

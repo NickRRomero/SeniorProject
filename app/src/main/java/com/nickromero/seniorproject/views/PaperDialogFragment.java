@@ -1,6 +1,5 @@
 package com.nickromero.seniorproject.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
@@ -10,15 +9,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
 
 import data.Paper;
+import data.enums.PaperRequestCodes;
 
 /**
  * Created by nickromero on 1/29/17.

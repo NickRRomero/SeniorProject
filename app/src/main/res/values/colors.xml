@@ -33,6 +33,7 @@
     <color name="grey">#9E9E9E</color>
     <color name="blueGrey">#607D8B</color>
     <color name="black">#000000</color>
+    <color name="whiteSmoke">#F0FFFF</color>
 
     <array name="colors">
         <item>@color/red</item>

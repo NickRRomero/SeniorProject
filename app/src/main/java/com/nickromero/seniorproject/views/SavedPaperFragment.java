@@ -1,7 +1,6 @@
 package com.nickromero.seniorproject.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,11 +13,10 @@ import com.nickromero.seniorproject.R;
 import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import data.Paper;
-import data.Subscription;
-import utilities.ColumnCountingUtility;
+import data.enums.PaperRequestCodes;
+import data.enums.PaperType;
 
 /**
  * Created by nickromero on 12/23/16.

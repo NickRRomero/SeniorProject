@@ -1,7 +1,6 @@
 package com.nickromero.seniorproject.views;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import java.util.Arrays;
 import data.Paper;
 import data.Qualifier;
 import data.Subscription;
+import data.enums.PaperType;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        //mPaperController.setAdapter(new PaperAdapter());
 
 
 
