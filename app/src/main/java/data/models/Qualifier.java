@@ -1,4 +1,4 @@
-package data;
+package data.models;
 
 /**
  * Created by nickromero on 1/19/17.
@@ -38,10 +38,15 @@ public abstract class Qualifier {
      * @param category used to specify a high level description of this qualifier
      * @param colorMapping
      */
-    public Qualifier(String category, String searchTerm, int colorMapping) {
+
+    private final String mType;
+
+    public Qualifier(String category, String searchTerm, int colorMapping, String type) {
         IEEE_SEARCH_CATEGORY = category;
         sSearchTerm = searchTerm;
         mColor = colorMapping;
+
+        mType = type;
 
     }
 
@@ -95,4 +100,7 @@ public abstract class Qualifier {
     }
 
 
+    public String getType() {
+        return mType;
+    }
 }

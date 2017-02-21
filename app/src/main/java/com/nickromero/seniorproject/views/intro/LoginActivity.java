@@ -1,4 +1,4 @@
-package com.nickromero.seniorproject.views;
+package com.nickromero.seniorproject.views.intro;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

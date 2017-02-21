@@ -13,8 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
+import com.nickromero.seniorproject.views.fragments.SubscribedPaperFragment;
 
-import data.Paper;
+import data.models.Paper;
 import data.enums.PaperRequestCodes;
 
 /**
@@ -100,6 +101,7 @@ public class PaperDialogFragment extends DialogFragment {
         LinearLayout authors = (LinearLayout) paperDialogLayout.findViewById(R.id.authors_dialog);
         TextView paper_abstract = (TextView) paperDialogLayout.findViewById(R.id.paper_abstract);
 
+
         for (String author : mPaper.getAuthors()) {
             TextView nextAuthor = (TextView) inflater.inflate(R.layout.text_view, null);
 
@@ -108,13 +110,8 @@ public class PaperDialogFragment extends DialogFragment {
         }
 
        //Change with real data
-       // paper_abstract.setText(mPaper.getAbstract());
-        paper_abstract.setText("\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea " +
-                "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse" +
-                " cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident," +
-                " sunt in culpa qui officia deserunt mollit anim id est laborum.\"");
+       paper_abstract.setText(mPaper.getAbstract());
+
 
 
         mDialogBuilder.setView(paperDialogLayout);

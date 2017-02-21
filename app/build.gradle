@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.nickromero.seniorproject"
         minSdkVersion 21
@@ -10,13 +11,21 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+
     }
+
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -27,17 +36,36 @@ dependencies {
     })
 
     //Android Material Card View
-    compile 'com.android.support:cardview-v7:25.0.1'
+    compile 'com.android.support:cardview-v7:25.1.1'
 
     //Sliding up panel
     compile 'com.sothree.slidinguppanel:library:3.3.1'
 
 
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
 
     // Circle ImageView
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
+    // Timber
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    compile ('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+        exclude module: 'stax-api'
+    }
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.retrofitAdapterVersion"
+
+
+    // RxJava
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+
     testCompile 'junit:junit:4.12'
+
+    //Material Dialog
+    compile 'com.afollestad.material-dialogs:core:0.9.3.0'
 }

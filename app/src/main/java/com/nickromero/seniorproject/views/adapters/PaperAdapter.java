@@ -15,10 +15,13 @@ import android.widget.TextView;
 import com.nickromero.seniorproject.R;
 import com.nickromero.seniorproject.views.PaperDialogFragment;
 
-import java.util.ArrayList;
+import org.w3c.dom.Text;
 
-import data.Paper;
-import data.Qualifier;
+import java.util.ArrayList;
+import java.util.List;
+
+import data.models.Paper;
+import data.models.Qualifier;
 import de.hdodenhof.circleimageview.CircleImageView;
 import utilities.PDFViewer;
 
@@ -73,6 +76,12 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
        // notifyDataSetChanged();
     }
 
+    public void addItems(List<Paper> papers) {
+        for (Paper paper : papers)
+            mPapers.add(paper);
+        notifyDataSetChanged();
+    }
+
     public Paper getItem(int position) {
 
         return mPapers.get(position);
@@ -105,6 +114,7 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
         private DialogFragment mPaperDialogFragment;
 
         private int mPapersPosition;
+
 
         public PaperHolder(android.content.Context context, View itemView) {
             super(itemView);
@@ -143,7 +153,7 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
 
 
             int idarr[] = {R.id.author1, R.id.author2, R.id.author3};
-            int i;
+            int i = 0;
 
             for (i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
                 ((TextView) mPapersAuthors.findViewById(idarr[i]))
@@ -158,7 +168,6 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
 
             mPaperTitle.setText(paper.getTitle());
             mPaperTitle.setTag(mPaper.getFileName());
-
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ArrayList<Qualifier> qualifiers = mPaper.getQualifiers();
             if (qualifiers.size() > 0) {

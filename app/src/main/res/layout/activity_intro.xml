@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.nickromero.seniorproject.views.IntroActivity"
+    tools:context="com.nickromero.seniorproject.views.intro.IntroActivity"
     >
 
     <android.support.design.widget.AppBarLayout

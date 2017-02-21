@@ -6,16 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-import data.Paper;
+import data.models.Paper;
 
 /**
  * Created by nickromero on 2/5/17.
@@ -89,7 +86,7 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
                 mPapersAuthors.setText(oldText + ", ");
             }*/
-            mPapersAuthors.setText(mPaper.getAuthors().get(0).toString());
+            //mPapersAuthors.setText(mPaper.getAuthors().get(0).toString());
             mSimilarityScore.setText("Score:\n" + (Math.abs(position - 20)));
             mPaperTitle.setText(mPaper.getTitle());
 

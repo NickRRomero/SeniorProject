@@ -1,4 +1,4 @@
-package com.nickromero.seniorproject.views;
+package com.nickromero.seniorproject.views.fragments;
 
 import android.content.Context;
 import android.support.v4.app.FragmentPagerAdapter;

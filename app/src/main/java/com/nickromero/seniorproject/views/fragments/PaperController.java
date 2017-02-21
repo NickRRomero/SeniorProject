@@ -1,11 +1,15 @@
-package com.nickromero.seniorproject.views;
+package com.nickromero.seniorproject.views.fragments;
 
 import android.support.v4.app.Fragment;
 
 import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 
+import java.util.List;
+
 import data.enums.PaperType;
+import data.models.Paper;
+import data.models.XMLRoot;
 
 /**
  * Created by nickromero on 2/5/17.
@@ -94,12 +98,26 @@ public class PaperController {
 
     public void addToSavedAdapter(int position, PaperType which) {
 
-        //System.out.println(position);
-        System.out.println(mSubscribedAdapter.getItem(position));
 
         mSavedAdapter.addItem(mSubscribedAdapter.getItem(position));
         removeFromAdapter(position, which);
-        //mSavedAdapter.notifyDataSetChanged();
-        //mSubscribedAdapter.notifyDataSetChanged();
+
+    }
+
+    public void addToSubscribedAdapter(List<Paper> papers) {
+        mSubscribedAdapter.addItems(papers);
+    }
+
+    public void updateSubscribed(XMLRoot xmlRoot) {
+
+
+        if (xmlRoot.totalfound > 0) {
+            int i = 0;
+            for (Paper paper: xmlRoot.getFoundPapers()) {
+                if (i++ == 10)
+                    break;
+                mSubscribedAdapter.addItem(paper);
+            }
+        }
     }
 }

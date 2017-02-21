@@ -7,10 +7,14 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
-
+        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
+
 }
 
 allprojects {
@@ -21,4 +25,13 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    timberVersion = '4.5.1'
+
+    retrofitVersion = '2.1.0'
+    retrofitAdapterVersion = '1.0.0'
+    retrofitLoggingVersion = '3.6.0'
+    rxAndroidVersion = '2.0.1'
+    rxJavaVersion = '2.0.5'
 }

@@ -1,4 +1,4 @@
-package com.nickromero.seniorproject.views;
+package com.nickromero.seniorproject.views.intro;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
+import com.nickromero.seniorproject.views.MainActivity;
 
 public class IntroActivity extends AppCompatActivity {
 

@@ -25,24 +25,18 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
-        </activity>
-        <activity
-            android:name=".views.CreateQualifierActivity"
-            android:label="Create a Subscription or Filter"
-            android:windowSoftInputMode="stateUnchanged">
-
-
         </activity>
 
+
         <activity
-            android:name=".views.IntroActivity"
+            android:name=".views.intro.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -51,8 +45,10 @@
 
         </activity>
         <activity
-            android:name=".views.LoginActivity"
+            android:name=".views.intro.LoginActivity"
             android:label="@string/title_activity_login">
+
+
 
 
 

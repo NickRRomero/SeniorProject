@@ -6,6 +6,6 @@ package com.nickromero.seniorproject.views;
 
 public interface QualifierDialogInterface {
 
-    public void onFinishedButtonClicked(String type, String searchField,
+     void onFinishedButtonClicked(String type, String searchField,
                                         String searchTerm, String description, int color);
 }

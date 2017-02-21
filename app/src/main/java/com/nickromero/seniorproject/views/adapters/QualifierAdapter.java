@@ -2,17 +2,20 @@ package com.nickromero.seniorproject.views.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.nickromero.seniorproject.R;
-
+import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 
-import data.Qualifier;
+import data.SQLConverter.SQLQualifierConverter;
+import data.models.Qualifier;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -84,6 +87,18 @@ public class QualifierAdapter extends BaseAdapter {
         return null;
     }
 
+    public void removeQualifier(int position) {
+
+        SQLQualifierConverter
+                .getInstance(mContext)
+                .deleteQualifierFromDatabase(mQualifiers.get(position));
+
+
+
+        mQualifiers.remove(position);
+        notifyDataSetChanged();
+    }
+
     /**
      * Not used
      * @param i
@@ -120,13 +135,34 @@ public class QualifierAdapter extends BaseAdapter {
         //Get description view
         mDescriptionTextView = (TextView) inflatedView.findViewById(R.id.builtQualifierDescription);
 
-        //Assign the values to the appropriate fields in the qualifer card
+        //Assign the values to the appropriate fields in the qualifier card
         mQualifierColor.setImageDrawable(new ColorDrawable(mQualifiers.get(position).getColor()));
         mCategoryTextView.setText(mQualifiers.get(position).getCategory());
         mSearchTermTextView.setText(mQualifiers.get(position).getSearchTerm());
         mDescriptionTextView.setText(mQualifiers.get(position).getDescription());
 
+        inflatedView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new MaterialDialog.Builder(mContext)
+                        .title(R.string.qualifier_dialog_title)
+                        .positiveText(R.string.delete)
+                        .onPositive((dialog, which) -> {
+                            removeQualifier(position);
+                            dialog.dismiss();
+                        })
+                        .negativeText(R.string.cancel)
+                        .onNegative(((dialog, which) -> {
+                            dialog.dismiss();
+                        }))
+                        .show();
+                return false;
+            }
+        });
+
+
         return inflatedView;
+
 
 
 

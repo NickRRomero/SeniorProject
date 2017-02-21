@@ -1,13 +1,10 @@
 package com.nickromero.seniorproject.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,22 +18,33 @@ import com.nickromero.seniorproject.views.adapters.QualifierAdapter;
 
 import com.nickromero.seniorproject.R;
 import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
+import com.nickromero.seniorproject.views.fragments.PaperController;
+import com.nickromero.seniorproject.views.fragments.PaperFragment;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import data.Paper;
-import data.Qualifier;
-import data.Subscription;
+import data.models.Paper;
+import data.models.Qualifier;
+import data.SQLConverter.SQLQualifierConverter;
+import data.models.Subscription;
 import data.enums.PaperType;
+import data.models.XMLRoot;
+import data.providers.PaperProvider;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class MainActivity extends AppCompatActivity implements QualifierDialogInterface{
+public class MainActivity extends AppCompatActivity implements QualifierDialogInterface {
 
     private Intent createSubOrFilter;
 
     private final int CREATE_ACTIVITY_CODE = 1;
 
-    private ArrayList<Qualifier> mQualifiers;
+    private ArrayList<Qualifier> mQualifiers = new ArrayList<>();
 
     private GridView mGridView;
 
@@ -48,11 +56,17 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     private PaperAdapter test;
 
+    private SQLQualifierConverter mQualifierConverter;
+
+    public MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainActivity = this;
+        mQualifierConverter = SQLQualifierConverter.getInstance(this);
 
-        createSubOrFilter = new Intent(this, CreateQualifierActivity.class);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -64,13 +78,17 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PaperProvider.getRoot("wang")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(mPaperController::updateSubscribed,
+                                throwable -> System.out.println(throwable.toString())
+                                , () -> System.out.println("Successful")
 
+                        );
 
-                qualifierDialog.show(getFragmentManager(), "dialog");
+                //qualifierDialog.show(getFragmentManager(), "dialog");
             }
         });
-
-
 
 
         mPaperFragments = new PaperFragment(getSupportFragmentManager(), MainActivity.this);
@@ -84,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         mPaperController = PaperController.getInstance();
 
 
-        mPaperController.setAdapter( new PaperAdapter(initSavedData(),
+        mPaperController.setAdapter(new PaperAdapter(initSavedData(),
                         0, mPaperFragments.mSavedFragment)
                 , PaperType.SAVED);
         mPaperController.setAdapter(
@@ -99,14 +117,16 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         mPaperController.setFragment(mPaperFragments.mSuggestedFragment, PaperType.SUGGESTED);
 
 //        mPaperController.attachAdapterToView(PaperType.SAVED);
-  //      mPaperController.attachAdapterToView(PaperType.SUBSCRIBED);
+        //      mPaperController.attachAdapterToView(PaperType.SUBSCRIBED);
 
         //Build GridView to hold future created subscriptions
 
-        mQualifiers = new ArrayList<>();
-        initData();
+
+        mQualifiers =  mQualifierConverter.getQualifiersFromDatabase();
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
         mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
+
+
 
     }
 
@@ -133,25 +153,13 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
-    /**
-     * Used for demo purposes to initialize a qualifier list
-     */
-    public void initData() {
-
-        mQualifiers.add(new Subscription("Abstract", "Security", Color.GREEN));
-        mQualifiers.add(new Subscription("Author", "Andrea Zanella", Color.RED));
-        mQualifiers.add(new Subscription("Title", "5G Network", Color.YELLOW));
-        mQualifiers.add(new Subscription("Title", "Smart", Color.BLACK));
-        mQualifiers.add(new Subscription("Abstract", "Neutrinos", Color.BLUE));
-        mQualifiers.add(new Subscription("Title", "Supernova", Color.CYAN));
-        mQualifiers.add(new Subscription("Title", "Neutrinos", Color.LTGRAY));
-        mQualifiers.add(new Subscription("Year", "1999", Color.MAGENTA));
-        mQualifiers.add(new Subscription("Author", "Petr Vogel", Color.DKGRAY));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //c.removeTable();
 
     }
+
 
     private ArrayList<Paper> initSavedData() {
         ArrayList<Paper> mPapersList = new ArrayList<>();
@@ -243,12 +251,29 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
                                         String description, int color) {
         mGridView.invalidate();
         Qualifier newQualifier;
-        newQualifier = new Subscription(searchField,searchTerm,
+        newQualifier = new Subscription(searchField, searchTerm,
                 color);
         if (description != null)
             newQualifier.setDescription(description);
+/*
+        if (searchField.equals("Author(s)")) {
+            PaperProvider.getRoot(searchTerm)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::printRoot,
+                            throwable -> System.out.println(throwable.toString())
+                            , () -> System.out.println("Successful")
 
-        mQualifiers.add(newQualifier);
+                    );
+        }*/
+
+
+
+
+
+                    mQualifiers.add(newQualifier);
         ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+        mQualifierConverter.addQualiferToDatabase(newQualifier);
+        System.out.println(mQualifierConverter.getQualifiersFromDatabase());
     }
+
 }

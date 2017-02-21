@@ -1,6 +1,5 @@
 package com.nickromero.seniorproject.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -17,11 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
 
-import data.Qualifier;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -244,7 +241,6 @@ public class QualifierDialogFragment extends DialogFragment {
         System.out.println(sSearchBoxText);
         resultSubOrFilter.putExtra("custom_description", customDescription);
         mDialogInterafce.onFinishedButtonClicked(typeOfModel,
-
                 mCategorySpinner.getSelectedItem().toString(),
                 sSearchBoxText,
                 customDescription,
