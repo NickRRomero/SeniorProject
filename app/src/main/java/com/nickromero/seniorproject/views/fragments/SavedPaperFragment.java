@@ -1,8 +1,8 @@
-package com.nickromero.seniorproject.views;
+package com.nickromero.seniorproject.views.fragments;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,16 +14,18 @@ import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 
 import java.util.ArrayList;
 
-import data.Paper;
+import data.models.Paper;
 import data.enums.PaperRequestCodes;
 import data.enums.PaperType;
 
 /**
  * Created by nickromero on 12/23/16.
  */
-public class SubscribedPaperFragment extends Fragment {
+public class SavedPaperFragment extends Fragment {
 
     private static final String MY_PAGE = "Saved";
+
+    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
 
     private PaperAdapter mAdapter;
 
@@ -35,57 +37,64 @@ public class SubscribedPaperFragment extends Fragment {
 
     private GridLayoutManager mGridLayoutManager;
 
-    public static SubscribedPaperFragment newInstance(int page) {
+    public static SavedPaperFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(MY_PAGE, page);
-        SubscribedPaperFragment fragment = new SubscribedPaperFragment();
+        SavedPaperFragment fragment = new SavedPaperFragment();
         fragment.setArguments(args);
+
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.subscribed_fragment_view, container, false);
+        View rootView = inflater.inflate(R.layout.saved_fragment_view, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSubscribedFragment);
-
-       // int numberOfColumns = ColumnCountingUtility.calculateNoOfColumns(getContext());
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSavedFragment);
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mRecyclerView.setAdapter(PaperController.getInstance().mSubscribedAdapter);
+        mRecyclerView.setAdapter(PaperController.getInstance().mSavedAdapter);
 
         return rootView;
+
     }
+
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, "gridLayoutManager");
+
+    }
+
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == PaperRequestCodes.MOVE_TO_SAVED.getVal()) {
-
-
-            PaperController.getInstance().addToSavedAdapter(
-                    data.getIntExtra("position", -1),
-                    PaperType.SUBSCRIBED);
-
-        }
-        else if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
+        if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
             PaperController.getInstance().removeFromAdapter(data.getIntExtra("position", -1),
-                    PaperType.SUBSCRIBED);
+                    PaperType.SAVED);
         }
     }
 
     public void attachAdapter(PaperAdapter adapter) {
+
         mRecyclerView.setAdapter(adapter);
 
     }
+
 }

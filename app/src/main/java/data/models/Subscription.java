@@ -1,4 +1,4 @@
-package data;
+package data.models;
 
 /**
  * Created by nickromero on 1/19/17.
@@ -16,7 +16,7 @@ public final class Subscription extends Qualifier {
      * @param colorMapping
      */
     public Subscription(String category, String searchTerm, int colorMapping) {
-        super(category, searchTerm, colorMapping);
+        super(category, searchTerm, colorMapping, "Subscription");
     }
 
 
