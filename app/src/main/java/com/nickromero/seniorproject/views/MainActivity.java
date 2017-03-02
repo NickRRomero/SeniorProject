@@ -21,8 +21,10 @@ import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 import com.nickromero.seniorproject.views.fragments.PaperController;
 import com.nickromero.seniorproject.views.fragments.PaperFragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import data.SQLConverter.SQLPaperConverter;
 import data.models.Paper;
@@ -35,6 +37,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements QualifierDialogInterface {
 
+    public static final String INITIAL_PAPERS = "initialPapers";
+    public static final String COUNT = "count";
     private Intent createSubOrFilter;
 
     private final int CREATE_ACTIVITY_CODE = 1;
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     private GridView mGridView;
 
-    private String[] colorArray;
+    private int[] colorArray;
 
     private PaperFragment mPaperFragments;
 
@@ -59,17 +63,19 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+
         mainActivity = this;
         mQualifierConverter = SQLQualifierConverter.getInstance(this);
         mPaperConverter = SQLPaperConverter.getInstance(this);
 
 
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        colorArray = getResources().getStringArray(R.array.colors);
 
+        colorArray = getResources().getIntArray(R.array.colors);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final QualifierDialogFragment qualifierDialog = QualifierDialogFragment.newInstance(this);
@@ -113,7 +119,32 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
         mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
 
+        buildInitialPapers();
 
+
+    }
+
+    private void buildInitialPapers() {
+        Bundle paperBundle = getIntent().getBundleExtra(INITIAL_PAPERS);
+        int paperCount = (int) paperBundle.get(COUNT);
+        mGridView.invalidate();
+        List<String> paperTitles = new ArrayList<>();
+        for (int i = 0; i < paperCount; i++) {
+            String title = (String) paperBundle.get(String.valueOf(i));
+            paperTitles.add(title);
+            Qualifier newQualifier = new Subscription("Title", title, colorArray[i]);
+            mQualifiers.add(newQualifier);
+            mQualifierConverter.addQualiferToDatabase(newQualifier);
+        }
+        ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+
+        PaperProvider.getInitalPapers(paperTitles)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mPaperController::updateSaved,
+                        throwable -> System.out.println(throwable.toString())
+                        , () -> System.out.println("Successful")
+
+                );
 
     }
 
@@ -147,78 +178,6 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     }
 
-/*
-    private ArrayList<Paper> initSavedData() {
-        ArrayList<Paper> mPapersList = new ArrayList<>();
-
-
-        Paper paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-        paper5.addQualifier(new Subscription("Title", "5G Network", Color.YELLOW));
-
-        mPapersList.add(paper5);
-
-
-        Paper chemPaper = new Paper("Design of End-Effectors " +
-                "for a Chemistry Automation Plant",
-                new ArrayList<String>(Arrays.asList("Akshaya Kumar", "Kamila Pillearachichige", "Hamid Sharifi",
-                        "Ben Shaw", "Frazer K. Noble")), "url", "chemistry.pdf");
-        mPapersList.add(chemPaper);
-        chemPaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
-
-
-        Paper gamePaper = new Paper("Does Gamification Work? — A Literature Review of Empirical Studies on Gamification",
-                new ArrayList<String>(Arrays.asList("Juho Hamari", "Jonna Koivisto", "Harri Sarsa")), "url", "gamification.pdf");
-
-        mPapersList.add(gamePaper);
-        gamePaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
-
-        mPapersList.add(new Paper("The Internet of Things for Health Care: A Comprehensive Survey",
-                new ArrayList<String>(Arrays.asList("S. M. RIAZUL ISLAM", "DAEHAN KWAK", "MD. HUMAUN KABIR", "MAHMUD HOSSAIN"
-                        , "KYUNG-SUP KWAK")), "url", "healthcare.pdf"));
-
-
-        Paper andPaper = new Paper("Internet of Things for Smart Cities",
-                new ArrayList<String>(Arrays.asList("Andrea Zanella", "Nicola Bui", "Angelo Castellani"
-                        , "Lorenzo Vangelista", "Michele Zorzi")), "url", "iot.pdf");
-
-        andPaper.addQualifier(new Subscription("Author", "Andrea Zanella", Color.RED));
-        andPaper.addQualifier(new Subscription("Title", "Smart", Color.BLACK));
-        mPapersList.add(andPaper);
-
-
-        Paper securityPaper = new Paper("Information Security in Big Data: Privacy and Data Mining",
-                new ArrayList<String>(Arrays.asList("LEI XU", "CHUNXIAO JIANG", "JIAN WANG",
-                        "JIAN YUAN", "YONG REN")), "url", "issecurity.pdf");
-        securityPaper.addQualifier(new Subscription("Abstract", "Security", Color.GREEN));
-
-        mPapersList.add(securityPaper);
-
-
-        mPapersList.add(new Paper("Predicting the Future With Social Media",
-                new ArrayList<String>(Arrays.asList("Sitaram Asur", "Bernardo A. Huberman")), "url", "mediafuture.pdf"));
-
-        mPapersList.add(new Paper("High-Performance Extreme Learning Machines: A Complete Toolbox for Big Data Applications",
-                new ArrayList<String>(Arrays.asList("ANTON AKUSOK", "KAJ-MIKAEL BJÖRK", "YOAN MICHE", "AMAURY LENDASSE")), "url", "performance.pdf"));
-
-        return mPapersList;
-    }*/
-
-    /*private ArrayList<Paper> initSubscribedData() {
-        ArrayList<Paper> mPapersList = new ArrayList<>();
-
-        Paper spacePaper = new Paper("WHAT MIGHT WE LEARN FROM A FUTURE SUPERNOVA NEUTRINO SIGNAL?",
-                new ArrayList<String>(Arrays.asList("PETR VOGEL")), "url", "space.pdf");
-        mPapersList.add(spacePaper);
-
-        spacePaper.addQualifier(new Subscription("Abstract", "Neutrinos", Color.BLUE));
-        spacePaper.addQualifier(new Subscription("Title", "Supernova", Color.CYAN));
-        spacePaper.addQualifier(new Subscription("Title", "Neutrinos", Color.LTGRAY));
-        spacePaper.addQualifier(new Subscription("Year", "1999", Color.MAGENTA));
-        spacePaper.addQualifier(new Subscription("Author", "Petr Vogel", Color.DKGRAY));
-
-        return mPapersList;
-    }*/
 
 
     @Override
@@ -243,11 +202,10 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
 
 
-
-                    mQualifiers.add(newQualifier);
+         mQualifiers.add(newQualifier);
         ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
         mQualifierConverter.addQualiferToDatabase(newQualifier);
-        System.out.println(mQualifierConverter.getQualifiersFromDatabase());
+
     }
 
 }

@@ -21,6 +21,7 @@ public class XMLRoot {
     public static final String TOTAL_PAPERS_FOUND = "totalfound";
     public static final String TOTAL_PAPER_SEARCHED = "totalsearched";
     public static final String DOCUMENT_ROOT = "document";
+
     @Element(name = TOTAL_PAPERS_FOUND)
     public long totalfound;
     @Element(name = TOTAL_PAPER_SEARCHED)

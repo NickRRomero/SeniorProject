@@ -38,4 +38,18 @@ public class PaperProvider {
         return apiService.getPapersByMetaText(data);
     }
 
+    public static Observable<XMLRoot> getInitalPapers(List<String> paperTitles) {
+        String queryTemplate = "(";
+        for (int i = 0; i < paperTitles.size(); i++) {
+            String title = paperTitles.get(i);
+            queryTemplate += "\"" + title + "\"";
+            if (i < paperTitles.size() - 1)
+                queryTemplate += " OR ";
+        }
+        queryTemplate += ")";
+        System.out.println(queryTemplate);
+        return apiService.getInitialpapers(queryTemplate);
+
+
+    }
 }

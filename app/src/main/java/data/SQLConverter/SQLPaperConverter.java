@@ -103,8 +103,7 @@ public class SQLPaperConverter {
     }
 
     public void adjustPaperType(Paper paper) {
-        //String strSQL = UPDATE + TABLE_NAME + SET + COLUMN_NAME_PAPER_TYPE + EQUALS +
-        //        "SAVED" + WHERE + COLUMN_NAME_TITLE + EQUALS + "\"" + title + "\"";
+
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COLUMN_NAME_TITLE, paper.getTitle());

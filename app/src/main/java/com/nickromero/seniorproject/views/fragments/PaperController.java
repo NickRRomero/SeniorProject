@@ -131,7 +131,6 @@ public class PaperController {
 
     public void updateSubscribed(XMLRoot xmlRoot) {
 
-
         if (xmlRoot.totalfound > 0) {
             int i = 0;
             for (Paper paper : xmlRoot.getFoundPapers()) {
@@ -139,6 +138,18 @@ public class PaperController {
                     break;
                 paper.setType("Subscribed");
                 mSubscribedAdapter.addItem(paper);
+                mSQLPaperConverter.addPaperToDatabase(paper);
+            }
+        }
+    }
+
+    public void updateSaved(XMLRoot xmlRoot) {
+        if (xmlRoot.totalfound > 0) {
+
+            for (Paper paper : xmlRoot.getFoundPapers()) {
+
+                paper.setType("Saved");
+                mSavedAdapter.addItem(paper);
                 mSQLPaperConverter.addPaperToDatabase(paper);
             }
         }

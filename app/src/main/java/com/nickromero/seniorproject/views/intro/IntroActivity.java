@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.nickromero.seniorproject.R;
 import com.nickromero.seniorproject.views.MainActivity;
 
+import org.w3c.dom.Text;
+
 public class IntroActivity extends AppCompatActivity {
 
     private int mCurrentPaperEntryLevel = 0;
@@ -33,12 +35,7 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-
-
             inflateNextPaperEntryLayout();
-
-
-
     }
 
     private void inflateNextPaperEntryLayout() {
@@ -75,7 +72,7 @@ public class IntroActivity extends AppCompatActivity {
         theView.findViewById(R.id.nextPaperFab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                theView.getLayoutParams();
+
 
                 RelativeLayout parentView = (RelativeLayout) view.getParent();
                 parentView.removeView(view);
@@ -87,6 +84,22 @@ public class IntroActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Intent newUserIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            int childCount = parent.getChildCount();
+                            Bundle bundle = new Bundle();
+                            int filledCount = 0;
+                            for (int i = 0; i < childCount; i++) {
+                                RelativeLayout relativeLayout = (RelativeLayout) parent.getChildAt(i);
+                                EditText editText = (EditText) relativeLayout.getChildAt(0);
+                                String title = editText.getText().toString();
+
+                                if (!title.isEmpty()) {
+                                    filledCount++;
+                                    bundle.putSerializable(String.valueOf(i), editText.getText().toString());
+                                }
+
+                            }
+                            bundle.putSerializable("count", filledCount);
+                            newUserIntent.putExtra("initialPapers", bundle);
                             startActivity(newUserIntent);
                         }
                     });
@@ -96,6 +109,7 @@ public class IntroActivity extends AppCompatActivity {
         });
 
         parent.addView(theView);
+
 
 
 
