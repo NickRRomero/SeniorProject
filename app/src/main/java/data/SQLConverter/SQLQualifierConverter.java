@@ -27,16 +27,17 @@ import static data.providers.database.QualifierContract.QualifierEntry.TABLE_NAM
 
 public class SQLQualifierConverter {
 
-    public static final String WHERE = " WHERE ";
-    public static final String DELETE_FROM = "DELETE FROM ";
-    public static final String AND = " AND ";
-    public static final String EQUALS = " = ";
-    public static SQLQualifierConverter sqlQualifierConverter;
+    private static final String WHERE = " WHERE ";
 
-    public static QualifierProvider mDbHelper;
+    private static final String DELETE_FROM = "DELETE FROM ";
+    private static final String AND = " AND ";
+    private static final String EQUALS = " = ";
+    private static SQLQualifierConverter sqlQualifierConverter;
 
-    static SQLiteDatabase mDBWriter;
-    static SQLiteDatabase mDBReader;
+    private static QualifierProvider mDbHelper;
+
+    private static SQLiteDatabase mDBWriter;
+    private static SQLiteDatabase mDBReader;
 
     private final String[] projection = {
             COLUMN_NAME_TYPE,
@@ -109,10 +110,6 @@ public class SQLQualifierConverter {
     }
 
     public void deleteQualifierFromDatabase(Qualifier qualifier) {
-        String selection = DELETE_FROM + TABLE_NAME + WHERE
-                + COLUMN_NAME_TYPE + EQUALS + qualifier.getType() + AND
-                + COLUMN_NAME_FIELD + EQUALS + qualifier.getCategory() + AND
-                + COLUMN_NAME_TERM + EQUALS + qualifier.getSearchTerm();
         mDBWriter.delete(TABLE_NAME,
                 "term=?", new String[] {qualifier.getSearchTerm()});
     }

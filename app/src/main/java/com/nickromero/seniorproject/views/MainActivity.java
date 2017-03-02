@@ -21,20 +21,15 @@ import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 import com.nickromero.seniorproject.views.fragments.PaperController;
 import com.nickromero.seniorproject.views.fragments.PaperFragment;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.xmlpull.v1.XmlSerializer;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
+import data.SQLConverter.SQLPaperConverter;
 import data.models.Paper;
 import data.models.Qualifier;
 import data.SQLConverter.SQLQualifierConverter;
 import data.models.Subscription;
 import data.enums.PaperType;
-import data.models.XMLRoot;
 import data.providers.PaperProvider;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -58,12 +53,15 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     private SQLQualifierConverter mQualifierConverter;
 
+    private SQLPaperConverter mPaperConverter;
+
     public MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainActivity = this;
         mQualifierConverter = SQLQualifierConverter.getInstance(this);
+        mPaperConverter = SQLPaperConverter.getInstance(this);
 
 
 
@@ -78,15 +76,9 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PaperProvider.getRoot("wang")
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(mPaperController::updateSubscribed,
-                                throwable -> System.out.println(throwable.toString())
-                                , () -> System.out.println("Successful")
 
-                        );
 
-                //qualifierDialog.show(getFragmentManager(), "dialog");
+                qualifierDialog.show(getFragmentManager(), "dialog");
             }
         });
 
@@ -99,28 +91,23 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        mPaperController = PaperController.getInstance();
+        mPaperController = PaperController.getInstance(getApplicationContext());
 
 
-        mPaperController.setAdapter(new PaperAdapter(initSavedData(),
+        mPaperController.setAdapter(new PaperAdapter(new ArrayList<Paper>(),
                         0, mPaperFragments.mSavedFragment)
                 , PaperType.SAVED);
         mPaperController.setAdapter(
-                new PaperAdapter(initSubscribedData(),
+                new PaperAdapter(new ArrayList<Paper>(),
                         1,
                         mPaperFragments.mSubscribedFragment), PaperType.SUBSCRIBED);
 
-        mPaperController.setAdapter(new SuggestedPaperAdapter(initSuggestedData(), mPaperFragments.mSuggestedFragment));
+        mPaperController.setSuggestedPaperAdapter(new SuggestedPaperAdapter(new ArrayList<Paper>(), mPaperFragments.mSuggestedFragment));
 
         mPaperController.setFragment(mPaperFragments.mSavedFragment, PaperType.SAVED);
         mPaperController.setFragment(mPaperFragments.mSubscribedFragment, PaperType.SUBSCRIBED);
         mPaperController.setFragment(mPaperFragments.mSuggestedFragment, PaperType.SUGGESTED);
-
-//        mPaperController.attachAdapterToView(PaperType.SAVED);
-        //      mPaperController.attachAdapterToView(PaperType.SUBSCRIBED);
-
-        //Build GridView to hold future created subscriptions
-
+        mPaperController.loadPapersFromSQLDatabase();
 
         mQualifiers =  mQualifierConverter.getQualifiersFromDatabase();
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
@@ -160,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     }
 
-
+/*
     private ArrayList<Paper> initSavedData() {
         ArrayList<Paper> mPapersList = new ArrayList<>();
 
@@ -215,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
                 new ArrayList<String>(Arrays.asList("ANTON AKUSOK", "KAJ-MIKAEL BJÖRK", "YOAN MICHE", "AMAURY LENDASSE")), "url", "performance.pdf"));
 
         return mPapersList;
-    }
+    }*/
 
-    private ArrayList<Paper> initSubscribedData() {
+    /*private ArrayList<Paper> initSubscribedData() {
         ArrayList<Paper> mPapersList = new ArrayList<>();
 
         Paper spacePaper = new Paper("WHAT MIGHT WE LEARN FROM A FUTURE SUPERNOVA NEUTRINO SIGNAL?",
@@ -231,20 +218,8 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         spacePaper.addQualifier(new Subscription("Author", "Petr Vogel", Color.DKGRAY));
 
         return mPapersList;
-    }
+    }*/
 
-    private ArrayList<Paper> initSuggestedData() {
-        ArrayList<Paper> mPapersList = new ArrayList<>();
-        Paper paper5;
-
-        for (int i = 0; i < 20; i++) {
-            paper5 = new Paper("Survey of 5G Network: Architecture and Emerging Technologies",
-                    new ArrayList<String>(Arrays.asList("AKHIL GUPTA", "RAKESH KUMAR JHA")), "url", "5g.pdf");
-            mPapersList.add(paper5);
-        }
-
-        return mPapersList;
-    }
 
     @Override
     public void onFinishedButtonClicked(String type, String searchField, String searchTerm,
@@ -255,16 +230,15 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
                 color);
         if (description != null)
             newQualifier.setDescription(description);
-/*
-        if (searchField.equals("Author(s)")) {
-            PaperProvider.getRoot(searchTerm)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::printRoot,
-                            throwable -> System.out.println(throwable.toString())
-                            , () -> System.out.println("Successful")
 
-                    );
-        }*/
+         PaperProvider.getRoot("wang")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(mPaperController::updateSubscribed,
+                                throwable -> System.out.println(throwable.toString())
+                                , () -> System.out.println("Successful")
+
+                        );
+
 
 
 

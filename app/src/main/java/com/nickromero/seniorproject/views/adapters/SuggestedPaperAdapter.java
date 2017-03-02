@@ -1,14 +1,31 @@
 package com.nickromero.seniorproject.views.adapters;
 
+import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nickromero.seniorproject.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -22,9 +39,11 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
     private ArrayList<Paper> mPapers;
 
-
+    private int mExpandedPosition = -1;
 
     private Fragment mParentFragment;
+
+    private RecyclerView re;
 
     /**
      * @param papers
@@ -33,12 +52,15 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
         mPapers = papers;
         mParentFragment = parentFragment;
+
+
     }
 
     @Override
     public PaperHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.suggested_paper_layout, parent, false);
+
 
         return new PaperHolder(parent.getContext(), inflatedView);
     }
@@ -47,12 +69,66 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
     @Override
     public void onBindViewHolder(PaperHolder holder, int position) {
         Paper paper = mPapers.get(position);
+
+        final boolean isExpanded = position == mExpandedPosition;
+        holder.expandArea.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.itemView.setActivated(isExpanded);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mExpandedPosition = isExpanded ? -1 : position;
+                //TransitionManager.beginDelayedTransition(this);
+                notifyDataSetChanged();
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new MaterialDialog.Builder(mParentFragment.getContext()).
+                        title("Navigate to Site\n" + paper.getURL())
+                        .content("Here you can save this paper to your device" +
+                                "for off-line viewing.")
+                        .positiveText("Go to URL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                WebView mWebView = (WebView) LayoutInflater.from(mParentFragment.getContext())
+                                        .inflate(R.layout.paper_webview, null);
+                                mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+
+
+
+
+                                mWebView.loadUrl(paper.getURL());
+                            }
+                        })
+                        .negativeText("Close")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
+
+
         holder.bindPaper(paper, position);
     }
+
+
 
     @Override
     public int getItemCount() {
         return mPapers.size();
+    }
+
+    public void addItem(Paper paper) {
+        mPapers.add(paper);
+        notifyDataSetChanged();
     }
 
     public class PaperHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -60,17 +136,29 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
         private final TextView mPapersAuthors;
         private final TextView mPaperTitle;
-        private final TextView mSimilarityScore;
+        private final TextView mPaperAbstract;
+        private final TextView mPaperYear;
+        private final TextView mPaperPublisher;
+        private final TextView mPaperISSN;
+        //private final TextView
+
         private final Context mContext;
         private Paper mPaper;
         private int mPapersPosition;
+
+        private RelativeLayout expandArea;
 
         public PaperHolder(Context context, View itemView) {
             super(itemView);
 
             mPapersAuthors = (TextView) itemView.findViewById(R.id.suggested_paper_authors);
             mPaperTitle = (TextView) itemView.findViewById(R.id.suggested_paper_title);
-            mSimilarityScore = (TextView) itemView.findViewById(R.id.suggested_paper_similarity_score);
+            mPaperAbstract = (TextView) itemView.findViewById(R.id.suggested_paper_abstract);
+            expandArea = (RelativeLayout) itemView.findViewById(R.id.suggested_paper_info);
+            mPaperYear = (TextView) itemView.findViewById(R.id.year);
+            mPaperPublisher = (TextView) itemView.findViewById(R.id.publisher);
+            mPaperISSN = (TextView) itemView.findViewById(R.id.issn);
+
             mContext = context;
 
         }
@@ -79,15 +167,13 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
             mPaper = paper;
             mPapersPosition = position;
             mPapersAuthors.setText("");
+            mPaperAbstract.setText(paper.getAbstract());
+            mPaperYear.setText(paper.getPubYear());
+            mPaperPublisher.setText(paper.getPublisher());
+            mPaperISSN.setText(paper.getISSN());
 
-            /*Dynamically add authors
-            for (int i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
-                String oldText = mPapersAuthors.getText().toString();
+            //mPapersAuthors.setText(mPaper.getAuthors());
 
-                mPapersAuthors.setText(oldText + ", ");
-            }*/
-            //mPapersAuthors.setText(mPaper.getAuthors().get(0).toString());
-            mSimilarityScore.setText("Score:\n" + (Math.abs(position - 20)));
             mPaperTitle.setText(mPaper.getTitle());
 
         }

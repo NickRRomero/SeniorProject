@@ -59,13 +59,12 @@ public class SubscribedPaperFragment extends Fragment implements PaperContract.V
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSubscribedFragment);
 
-       // int numberOfColumns = ColumnCountingUtility.calculateNoOfColumns(getContext());
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mRecyclerView.setAdapter(PaperController.getInstance().mSubscribedAdapter);
+        mRecyclerView.setAdapter(PaperController.mSubscribedAdapter);
 
         mPresenter = new PaperPresenter(this);
 
@@ -101,13 +100,13 @@ public class SubscribedPaperFragment extends Fragment implements PaperContract.V
         if (resultCode == PaperRequestCodes.MOVE_TO_SAVED.getVal()) {
 
 
-            PaperController.getInstance().addToSavedAdapter(
+            PaperController.getInstance(getContext()).addToSavedAdapter(
                     data.getIntExtra("position", -1),
                     PaperType.SUBSCRIBED);
 
         }
         else if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
-            PaperController.getInstance().removeFromAdapter(data.getIntExtra("position", -1),
+            PaperController.getInstance(getContext()).removeFromAdapter(data.getIntExtra("position", -1),
                     PaperType.SUBSCRIBED);
         }
     }
@@ -119,7 +118,7 @@ public class SubscribedPaperFragment extends Fragment implements PaperContract.V
 
     @Override
     public void updatePapers(List<Paper> papers) {
-        PaperController.getInstance().addToSubscribedAdapter(papers);
+        PaperController.getInstance(getContext()).addToSubscribedAdapter(papers);
     }
 
     @Override

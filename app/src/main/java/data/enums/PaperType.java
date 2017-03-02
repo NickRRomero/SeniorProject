@@ -5,5 +5,15 @@ package data.enums;
  */
 
 public enum PaperType {
-    SAVED, SUBSCRIBED, SUGGESTED
+    SAVED("Saved"), SUBSCRIBED("Subscribed"), SUGGESTED("Suggested");
+
+    private final String type;
+
+    PaperType(String s) {
+        type = s;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

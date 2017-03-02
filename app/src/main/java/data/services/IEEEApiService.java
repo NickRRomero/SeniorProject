@@ -3,6 +3,7 @@ package data.services;
 import android.util.Xml;
 
 import java.util.List;
+import java.util.Map;
 
 import data.models.Paper;
 import data.models.XMLRoot;
@@ -11,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import io.reactivex.Observable;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
 /**
@@ -31,9 +33,11 @@ public interface IEEEApiService {
     @GET("ipsSearch.jsp")
     Observable<XMLRoot> getRoot(@Query("au") String author);
 
+    @GET("ipsSearch.jsp")
+    Observable<XMLRoot> getPapersByMetaText(@QueryMap Map<String, String>  options);
+
     //@GET("{url}")
     //Observable<XMLRoot> getRoot(@Path("url") String url);
 
-    @GET("ipsSearch.jsp?au=wangz")
-    String getString();
+
 }

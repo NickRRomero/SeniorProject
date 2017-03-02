@@ -65,7 +65,7 @@ public class SavedPaperFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mRecyclerView.setAdapter(PaperController.getInstance().mSavedAdapter);
+        mRecyclerView.setAdapter(PaperController.getInstance(getContext()).mSavedAdapter);
 
         return rootView;
 
@@ -86,7 +86,7 @@ public class SavedPaperFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
-            PaperController.getInstance().removeFromAdapter(data.getIntExtra("position", -1),
+            PaperController.getInstance(getContext()).removeFromAdapter(data.getIntExtra("position", -1),
                     PaperType.SAVED);
         }
     }

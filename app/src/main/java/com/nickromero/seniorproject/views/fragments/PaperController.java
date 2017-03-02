@@ -1,12 +1,17 @@
 package com.nickromero.seniorproject.views.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.nickromero.seniorproject.views.MainActivity;
 import com.nickromero.seniorproject.views.adapters.PaperAdapter;
 import com.nickromero.seniorproject.views.adapters.SuggestedPaperAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import data.SQLConverter.SQLPaperConverter;
 import data.enums.PaperType;
 import data.models.Paper;
 import data.models.XMLRoot;
@@ -27,16 +32,23 @@ public class PaperController {
 
     private static PaperController mInstance;
 
-    private PaperController(){};
+    private PaperController() {
+    }
+
+    ;
+
+    private Context mContext;
+
+    private static SQLPaperConverter mSQLPaperConverter;
 
 
-    public static PaperController getInstance() {
+    public static PaperController getInstance(Context context) {
 
         if (mInstance == null) {
             mInstance = new PaperController();
+            mSQLPaperConverter = SQLPaperConverter.getInstance(context);
             return mInstance;
-        }
-        else
+        } else
             return mInstance;
     }
 
@@ -46,6 +58,7 @@ public class PaperController {
         switch (which) {
             case SAVED:
                 mSavedAdapter = adapter;
+
                 break;
             case SUBSCRIBED:
                 mSubscribedAdapter = adapter;
@@ -53,7 +66,17 @@ public class PaperController {
         }
     }
 
-    public void setAdapter(SuggestedPaperAdapter adapter) {
+    public void loadPapersFromSQLDatabase() {
+            ArrayList<Paper> papers = mSQLPaperConverter.getPapersFromDatabase();
+            for (Paper paper : papers) {
+                if (paper.getType().equals(PaperType.SAVED.getType()))
+                    mSavedAdapter.addItem(paper);
+                else
+                    mSubscribedAdapter.addItem(paper);
+            }
+    }
+
+    public void setSuggestedPaperAdapter(SuggestedPaperAdapter adapter) {
         mSuggestedAdapter = adapter;
     }
 
@@ -67,42 +90,40 @@ public class PaperController {
                 mSubscribedFragment = fragment;
                 break;
             case SUGGESTED:
-                mSuggestedFragment =  fragment;
-                break;
-        }
-    }
-
-    public void attachAdapterToView(PaperType which) {
-
-        switch (which) {
-            case SAVED:
-                ((SavedPaperFragment)mSavedFragment).attachAdapter(mSavedAdapter);
-                break;
-            case SUBSCRIBED:
-                ((SubscribedPaperFragment)mSubscribedFragment).attachAdapter(mSubscribedAdapter);
-                break;
-        }
-
-    }
-
-    public void removeFromAdapter(int position, PaperType which) {
-        switch (which) {
-            case SAVED:
-                mSavedAdapter.removeItem(position);
-                break;
-            case SUBSCRIBED:
-                mSubscribedAdapter.removeItem(position);
+                mSuggestedFragment = fragment;
                 break;
         }
     }
 
     public void addToSavedAdapter(int position, PaperType which) {
 
+        Paper paperToMove = mSubscribedAdapter.getItem(position);
+        paperToMove.setType(PaperType.SAVED.getType());
+        mSQLPaperConverter.adjustPaperType(paperToMove);
 
-        mSavedAdapter.addItem(mSubscribedAdapter.getItem(position));
-        removeFromAdapter(position, which);
+        mSavedAdapter.addItem(paperToMove);
+
+        mSubscribedAdapter.removeItem(position);
 
     }
+
+    public void removeFromAdapter(int position, PaperType which) {
+        switch (which) {
+            case SAVED:
+                mSQLPaperConverter.deletePaperFromDatabase(mSavedAdapter.getItem(position));
+                mSavedAdapter.removeItem(position);
+
+                break;
+            case SUBSCRIBED:
+                mSQLPaperConverter.deletePaperFromDatabase(mSubscribedAdapter.getItem(position));
+                mSubscribedAdapter.removeItem(position);
+
+                break;
+        }
+
+    }
+
+
 
     public void addToSubscribedAdapter(List<Paper> papers) {
         mSubscribedAdapter.addItems(papers);
@@ -113,11 +134,26 @@ public class PaperController {
 
         if (xmlRoot.totalfound > 0) {
             int i = 0;
-            for (Paper paper: xmlRoot.getFoundPapers()) {
+            for (Paper paper : xmlRoot.getFoundPapers()) {
                 if (i++ == 10)
                     break;
+                paper.setType("Subscribed");
                 mSubscribedAdapter.addItem(paper);
+                mSQLPaperConverter.addPaperToDatabase(paper);
             }
         }
     }
+
+    public void updateSuggested(XMLRoot xmlRoot) {
+        if (xmlRoot.totalfound > 0) {
+            int i = 0;
+            for (Paper paper : xmlRoot.getFoundPapers()) {
+                if (i++ == 10)
+                    break;
+                mSuggestedAdapter.addItem(paper);
+            }
+        }
+    }
+
+
 }

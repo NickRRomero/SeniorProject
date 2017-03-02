@@ -1,7 +1,9 @@
 package data.providers;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import data.models.Paper;
 import data.models.XMLRoot;
@@ -21,12 +23,19 @@ public class PaperProvider {
     }
 
     public static Observable<XMLRoot> getRoot(String author) {
-        System.out.println(apiService.getRoot(author).toString());
+
         return apiService.getRoot(author);
     }
 
-    public static String getString() {
-        return apiService.getString();
+    public static Observable<XMLRoot> getPapersByMetadata(String text, int curPageOffset) {
+
+        //String query = author  + curPageOffset;
+        //System.out.println(query);
+        Map<String, String> data = new HashMap<>();
+        data.put("querytext", text);
+        data.put("rs", (String.valueOf(curPageOffset)));
+
+        return apiService.getPapersByMetaText(data);
     }
 
 }

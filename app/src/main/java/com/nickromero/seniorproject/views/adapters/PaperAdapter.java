@@ -131,11 +131,16 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    mPaperDialogFragment = new PaperDialogFragment().newInstance(mCardViewToInflate, mParentFragment, mPaper,
-                            mPapersPosition);
-                    System.out.println("CHECKER : " + mParentFragment);
-                    mPaperDialogFragment.setTargetFragment(mParentFragment, 6);
-                    mPaperDialogFragment.show(mParentFragment.getFragmentManager(), "dialog");
+                    if (mParentFragment != null) {
+                        mPaperDialogFragment = new PaperDialogFragment().newInstance(mCardViewToInflate, mParentFragment, mPaper,
+                                mPapersPosition);
+
+
+                        mPaperDialogFragment.setTargetFragment(mParentFragment, 6);
+
+                        mPaperDialogFragment.show(mParentFragment.getFragmentManager(), "dialog");
+                        return true;
+                    }
                     return true;
                 }
             });

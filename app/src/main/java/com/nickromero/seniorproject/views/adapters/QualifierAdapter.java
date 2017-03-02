@@ -146,6 +146,7 @@ public class QualifierAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 new MaterialDialog.Builder(mContext)
                         .title(R.string.qualifier_dialog_title)
+
                         .positiveText(R.string.delete)
                         .onPositive((dialog, which) -> {
                             removeQualifier(position);

@@ -150,6 +150,11 @@ public class Paper implements Serializable{
     private ArrayList<Qualifier> myQualifers = new ArrayList<>();
 
     /**
+     * Type of a paper depends on the whether or not it is in saved/suggested
+     */
+    private String mPaperType;
+
+    /**
      * Paper constructor. Called whenever a paper is saved to the device.
      * @param title String title of a paper
      * @param authors Collection of strings representing author names
@@ -169,9 +174,24 @@ public class Paper implements Serializable{
 
 
 
-    public Paper() {
 
 
+    public Paper() {}
+
+    public Paper(String title, String authors, String pabstract, String issn, String isbn, String mdurl, String pdfurl, String papertype) {
+        mPaperTitle = title;
+        mAuthors = authors;
+        mAbstract = pabstract;
+        mISSN = issn;
+        mISBN = isbn;
+        mMdURL = mdurl;
+        mPDFURL = pdfurl;
+        mPaperType = papertype;
+
+    }
+
+    public String getISBN() {
+        return mISBN;
     }
 
     /**
@@ -206,6 +226,7 @@ public class Paper implements Serializable{
                 mPaperAuthors.add(s.trim());
             }
         }
+
         return mPaperAuthors;
     }
 
@@ -231,5 +252,34 @@ public class Paper implements Serializable{
 
     public String getAbstract() {
         return mAbstract;
+    }
+
+    public String getPublisher() {
+        return mPublisher;
+    }
+
+    public String getPubYear() {
+        return mPubYear;
+    }
+
+    public String getISSN() {
+        return mISSN;
+    }
+
+    public String getURL() {
+        return mMdURL;
+    }
+
+    public String getMDURL() {
+        return mMdURL;
+    }
+
+    public void setType(String type) {
+        mPaperType = type;
+    }
+
+    public String getType() {
+
+        return mPaperType;
     }
 }
