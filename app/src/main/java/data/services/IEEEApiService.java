@@ -31,7 +31,7 @@ public interface IEEEApiService {
     Observable<List<Paper>> getPaperByAuthor(@Query("author") String author);
 
     @GET("ipsSearch.jsp")
-    Observable<XMLRoot> getRoot(@Query("au") String author);
+    Observable<XMLRoot> getRoot(@QueryMap Map<String, String>  options);
 
     /**
      * Searches the IEEE Gateway using the md parameter. Searches all metadata, titles, abstracts

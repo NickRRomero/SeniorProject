@@ -18,19 +18,36 @@ import io.reactivex.Observable;
 public class PaperProvider {
     private static IEEEApiService apiService = ApiProvider.getApiService();
 
+    private static HashMap<String, String> QUERY_HASHMAP = new HashMap<String, String>() {{
+        put("Metadata", "md");
+        put("Document Title", "ti");
+        put("Author(s)", "au");
+        put("Publication Title", "jn");
+        put("Publication Year", "py");
+        put("Abstract", "ab");
+        put("Index Terms", "idxterms");
+        put("DOI", "doi");
+        put("Publisher", "pu");
+    }};
+
+
+
+
     public static Observable<List<Paper>> getAuthorPapers(String author) {
         return apiService.getPaperByAuthor(author);
     }
 
-    public static Observable<XMLRoot> getRoot(String author) {
+    public static Observable<XMLRoot> getRoot(String field, String searchTerm) {
 
-        return apiService.getRoot(author);
+        Map<String, String> data = new HashMap<>();
+        data.put(QUERY_HASHMAP.get(field), searchTerm);
+
+        return apiService.getRoot(data);
     }
 
     public static Observable<XMLRoot> getPapersByMetadata(String text, int curPageOffset) {
 
-        //String query = author  + curPageOffset;
-        //System.out.println(query);
+
         Map<String, String> data = new HashMap<>();
         data.put("querytext", text);
         data.put("rs", (String.valueOf(curPageOffset)));
@@ -47,7 +64,7 @@ public class PaperProvider {
                 queryTemplate += " OR ";
         }
         queryTemplate += ")";
-        System.out.println(queryTemplate);
+
         return apiService.getInitialpapers(queryTemplate);
 
 

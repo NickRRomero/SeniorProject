@@ -238,7 +238,7 @@ public class QualifierDialogFragment extends DialogFragment {
         resultSubOrFilter.putExtra("search_field", mCategorySpinner.getSelectedItem().toString());
         resultSubOrFilter.putExtra("color", mColorNames[mColorSpinner.getSelectedItemPosition()]);
 
-        System.out.println(sSearchBoxText);
+
         resultSubOrFilter.putExtra("custom_description", customDescription);
         mDialogInterafce.onFinishedButtonClicked(typeOfModel,
                 mCategorySpinner.getSelectedItem().toString(),

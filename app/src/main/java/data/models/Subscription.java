@@ -19,6 +19,10 @@ public final class Subscription extends Qualifier {
         super(category, searchTerm, colorMapping, "Subscription");
     }
 
+    public Subscription(String category, String searchTerm, int colorMapping, int primaryKey) {
+        super(category, searchTerm, colorMapping, "Subscription", primaryKey);
+    }
+
 
     /**
      * Getter used to retrieve the type of qualifier

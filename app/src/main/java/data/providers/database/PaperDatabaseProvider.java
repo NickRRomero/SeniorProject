@@ -17,6 +17,7 @@ public class PaperDatabaseProvider extends SQLiteOpenHelper{
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + PaperDatabaseContract.PaperEntry.TABLE_NAME + " (" +
+                    PaperDatabaseContract.PaperEntry.PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_TITLE + " TEXT," +
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_AUTHORS + " TEXT," +
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_ABSTRACT + " TEXT," +
@@ -24,10 +25,10 @@ public class PaperDatabaseProvider extends SQLiteOpenHelper{
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_ISBN + " TEXT," +
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_MD_URL + " TEXT," +
                     PaperDatabaseContract.PaperEntry.COLUMN_NAME_PDF_URL + " TEXT," +
-                    PaperDatabaseContract.PaperEntry.COLUMN_NAME_PAPER_TYPE + " TEXT)";
+                    PaperDatabaseContract.PaperEntry.COLUMN_NAME_PAPER_TYPE + " TEXT" +
+                    ")";
 
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE " + PaperDatabaseContract.PaperEntry.TABLE_NAME;
+
 
     public PaperDatabaseProvider(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,8 +45,4 @@ public class PaperDatabaseProvider extends SQLiteOpenHelper{
 
     }
 
-    public void dropTable() {
-        mDb.execSQL("DROP TABLE papers");
-        mDb.execSQL(SQL_CREATE_ENTRIES);
-    }
 }

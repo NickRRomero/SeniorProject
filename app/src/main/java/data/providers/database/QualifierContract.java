@@ -12,6 +12,7 @@ public final class QualifierContract {
 
     public static class QualifierEntry implements BaseColumns {
         public static final String TABLE_NAME = "qualifiers";
+        public static final String PRIMARY_KEY = "primary_key";
         public static final String COLUMN_NAME_TYPE = "type";
         public static final String COLUMN_NAME_TERM = "term";
         public static final String COLUMN_NAME_FIELD = "field";

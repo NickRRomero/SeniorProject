@@ -40,14 +40,21 @@ public abstract class Qualifier {
      */
 
     private final String mType;
+    private int mPrimaryKey;
 
     public Qualifier(String category, String searchTerm, int colorMapping, String type) {
         IEEE_SEARCH_CATEGORY = category;
         sSearchTerm = searchTerm;
         mColor = colorMapping;
-
         mType = type;
+    }
 
+    public Qualifier(String category, String searchTerm, int colorMapping, String type, int primaryKey) {
+        IEEE_SEARCH_CATEGORY = category;
+        sSearchTerm = searchTerm;
+        mColor = colorMapping;
+        mPrimaryKey = primaryKey;
+        mType = type;
     }
 
     /**
@@ -102,5 +109,9 @@ public abstract class Qualifier {
 
     public String getType() {
         return mType;
+    }
+
+    public int getPrimaryKey() {
+        return mPrimaryKey;
     }
 }

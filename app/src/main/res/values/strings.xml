@@ -23,12 +23,14 @@
         <item>Document Title</item>
         <item>Author(s)</item>
         <item>Publication Title</item>
+        <item>Publication Year</item>
+        <item>Publisher</item>
         <item>Abstract</item>
         <item>Index Terms</item>
         <item>DOI</item>
     </string-array>
     <string name="title_activity_intro">IntroActivity</string>
-
+    <string name="download_paper">Download Paper</string>
     <string name="intoMessage">Customized Access to Content is a bookshelf for Academic Papers.
         Your bookshelf is customized with papers you would be most likely interested in
         reading. To create this experience we need just a few papers to get the ball rolling.</string>

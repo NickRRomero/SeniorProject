@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import data.models.Paper;
 import data.models.Qualifier;
@@ -20,6 +22,7 @@ import static data.providers.database.PaperDatabaseContract.PaperEntry.COLUMN_NA
 import static data.providers.database.PaperDatabaseContract.PaperEntry.COLUMN_NAME_PAPER_TYPE;
 import static data.providers.database.PaperDatabaseContract.PaperEntry.COLUMN_NAME_PDF_URL;
 import static data.providers.database.PaperDatabaseContract.PaperEntry.COLUMN_NAME_TITLE;
+import static data.providers.database.PaperDatabaseContract.PaperEntry.PRIMARY_KEY;
 import static data.providers.database.PaperDatabaseContract.PaperEntry.TABLE_NAME;
 
 /**
@@ -28,12 +31,7 @@ import static data.providers.database.PaperDatabaseContract.PaperEntry.TABLE_NAM
 
 public class SQLPaperConverter {
 
-    private static final String WHERE = " WHERE ";
-    private static final String UPDATE = " UPDATE ";
-    private static final String SET = " SET ";
-    private static final String DELETE_FROM = "DELETE FROM ";
-    private static final String AND = " AND ";
-    private static final String EQUALS = " = ";
+
     private static SQLPaperConverter sqlPaperConverter;
 
     private static PaperDatabaseProvider mDbHelper;
@@ -73,20 +71,34 @@ public class SQLPaperConverter {
         Cursor cursor = mDBWriter.rawQuery(selection, null);
         Paper paper;
         ArrayList<Paper> papers = new ArrayList<>();
-        String title, authors, pabstract, issn, isbn, mdurl, pdfurl, papertype;
+        String title, authors, pabstract, issn, isbn, mdurl, pdfurl, papertype, colors;
+        int primary_key, col;
+        String[] colorStrArr;
+        int[] colorArr;
+        List<String> authorsList;
+
 
         while (cursor.moveToNext()) {
-            title = cursor.getString(0);
-            authors = cursor.getString(1);
-            pabstract = cursor.getString(2);
-            issn = cursor.getString(3);
-            isbn = cursor.getString(4);
-            mdurl = cursor.getString(5);
-            pdfurl = cursor.getString(6);
-            papertype = cursor.getString(7);
+            col = 0;
+            primary_key = cursor.getInt(col++);
 
-            paper = new Paper(title, authors, pabstract, issn
-            , isbn, mdurl, pdfurl, papertype);
+            title = cursor.getString(col++);
+            authors = cursor.getString(col++);
+            pabstract = cursor.getString(col++);
+            issn = cursor.getString(col++);
+            isbn = cursor.getString(col++);
+            mdurl = cursor.getString(col++);
+            pdfurl = cursor.getString(col++);
+            papertype = cursor.getString(col);
+
+
+
+            authorsList =  Arrays.asList(authors.split(","));
+
+
+
+            paper = new Paper(title, authorsList, pabstract, issn
+            , isbn, mdurl, pdfurl, papertype, primary_key);
 
             papers.add(paper);
 
@@ -99,13 +111,15 @@ public class SQLPaperConverter {
     }
 
     public void deletePaperFromDatabase(Paper paper) {
-        mDBWriter.delete(TABLE_NAME, "title=?", new String[] {paper.getTitle()});
+        mDBWriter.delete(TABLE_NAME, "primary_key=?",
+                new String[] {String.valueOf(paper.getPrimaryKey())});
     }
 
     public void adjustPaperType(Paper paper) {
 
         ContentValues contentValues = new ContentValues();
 
+        contentValues.put(PRIMARY_KEY, paper.getPrimaryKey());
         contentValues.put(COLUMN_NAME_TITLE, paper.getTitle());
         contentValues.put(COLUMN_NAME_AUTHORS, paper.getAuthors().toString());
         contentValues.put(COLUMN_NAME_ABSTRACT, paper.getAbstract());
@@ -115,6 +129,9 @@ public class SQLPaperConverter {
         contentValues.put(COLUMN_NAME_PDF_URL, paper.getURL());
         contentValues.put(COLUMN_NAME_PAPER_TYPE, "Saved");
 
-        mDBWriter.update(TABLE_NAME, contentValues, "title=?", new String[] {paper.getTitle()});
+
+
+        mDBWriter.update(TABLE_NAME, contentValues, "primary_key=?",
+                new String[] {String.valueOf(paper.getPrimaryKey())});
     }
 }

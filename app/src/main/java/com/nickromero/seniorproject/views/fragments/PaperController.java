@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.SQLConverter.SQLPaperConverter;
+import data.SQLConverter.SQLPaperQualiferConverter;
 import data.enums.PaperType;
 import data.models.Paper;
+import data.models.Qualifier;
 import data.models.XMLRoot;
 
 /**
@@ -40,6 +42,8 @@ public class PaperController {
     private Context mContext;
 
     private static SQLPaperConverter mSQLPaperConverter;
+    private static SQLPaperQualiferConverter mSQLPaperQualiferConverter;
+
 
 
     public static PaperController getInstance(Context context) {
@@ -47,6 +51,7 @@ public class PaperController {
         if (mInstance == null) {
             mInstance = new PaperController();
             mSQLPaperConverter = SQLPaperConverter.getInstance(context);
+            mSQLPaperQualiferConverter = SQLPaperQualiferConverter.getInstance(context);
             return mInstance;
         } else
             return mInstance;
@@ -68,7 +73,12 @@ public class PaperController {
 
     public void loadPapersFromSQLDatabase() {
             ArrayList<Paper> papers = mSQLPaperConverter.getPapersFromDatabase();
+
             for (Paper paper : papers) {
+
+
+                paper.setQualifiers(mSQLPaperQualiferConverter.getPapersQualifiers(paper));
+
                 if (paper.getType().equals(PaperType.SAVED.getType()))
                     mSavedAdapter.addItem(paper);
                 else
@@ -129,17 +139,27 @@ public class PaperController {
         mSubscribedAdapter.addItems(papers);
     }
 
-    public void updateSubscribed(XMLRoot xmlRoot) {
+    public void updateSubscribed(XMLRoot xmlRoot, Qualifier newQualifier) {
 
         if (xmlRoot.totalfound > 0) {
             int i = 0;
-            for (Paper paper : xmlRoot.getFoundPapers()) {
-                if (i++ == 10)
-                    break;
+            List<Paper> smallList = xmlRoot.getFoundPapers().subList(0, 5);
+
+            for (Paper paper : smallList) {
                 paper.setType("Subscribed");
-                mSubscribedAdapter.addItem(paper);
                 mSQLPaperConverter.addPaperToDatabase(paper);
             }
+
+            smallList = mSQLPaperConverter.getPapersFromDatabase();
+            smallList = smallList.subList(smallList.size() - 5, smallList.size());
+
+            for (Paper paper : smallList) {
+                mSQLPaperQualiferConverter.setQualifiersForPaper(paper, newQualifier);
+            }
+
+            mSubscribedAdapter.removeAllItems();
+            mSavedAdapter.removeAllItems();
+            loadPapersFromSQLDatabase();
         }
     }
 

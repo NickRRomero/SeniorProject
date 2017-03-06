@@ -19,6 +19,9 @@ public final class Filter extends Qualifier {
         super(category, searchTerm, colorMapping, "Filter");
     }
 
+    public Filter(String category, String searchTerm, int colorMapping, int primaryKey) {
+        super(category, searchTerm, colorMapping, "Filter", primaryKey);
+    }
 
     /**
      * Getter used to retrieve the type of qualifier

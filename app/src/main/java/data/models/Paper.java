@@ -16,8 +16,8 @@ import java.util.List;
  * Created by nickromero on 1/3/17.
  */
 
-@Root(name="document", strict = false)
-public class Paper implements Serializable{
+@Root(name = "document", strict = false)
+public class Paper implements Serializable {
 
 
     @Element(name = RANK, required = false)
@@ -115,7 +115,6 @@ public class Paper implements Serializable{
     public static final String PDF_URL = "pdf";
 
 
-
     /**
      * Absolute path to where a file is saved on the device
      */
@@ -147,7 +146,8 @@ public class Paper implements Serializable{
 
     private List<String> mPaperAuthors;
 
-    private ArrayList<Qualifier> myQualifers = new ArrayList<>();
+    private ArrayList<Qualifier> myQualifiers = new ArrayList<>();
+
 
     /**
      * Type of a paper depends on the whether or not it is in saved/suggested
@@ -155,11 +155,17 @@ public class Paper implements Serializable{
     private String mPaperType;
 
     /**
+     * Primary key used for the SQLLite database
+     */
+    private int mPrimaryKey;
+
+    /**
      * Paper constructor. Called whenever a paper is saved to the device.
-     * @param title String title of a paper
-     * @param authors Collection of strings representing author names
+     *
+     * @param title            String title of a paper
+     * @param authors          Collection of strings representing author names
      * @param downloadLocation String representation of a file's downloaded location
-     * @param fileName String name of the downloaded file
+     * @param fileName         String name of the downloaded file
      */
     public Paper(String title, ArrayList<String> authors, String downloadLocation, String fileName) {
 
@@ -168,46 +174,50 @@ public class Paper implements Serializable{
         mPathToFile = downloadLocation;
         mFileName = fileName;
         mLastPageRead = 0;
-        myQualifers = new ArrayList<>();
+        myQualifiers = new ArrayList<>();
 
     }
 
 
+    public Paper() {
+    }
 
-
-
-    public Paper() {}
-
-    public Paper(String title, String authors, String pabstract, String issn, String isbn, String mdurl, String pdfurl, String papertype) {
+    public Paper(String title, List<String> authors, String pabstract,
+                 String issn, String isbn, String mdurl, String pdfurl, String papertype, int primary_key) {
         mPaperTitle = title;
-        mAuthors = authors;
+        mPaperAuthors = authors;
         mAbstract = pabstract;
         mISSN = issn;
         mISBN = isbn;
         mMdURL = mdurl;
         mPDFURL = pdfurl;
         mPaperType = papertype;
+        mPrimaryKey = primary_key;
+        myQualifiers = new ArrayList<>();
 
     }
 
-    public String getISBN() {
-        return mISBN;
-    }
 
     /**
      * Called whenever a paper is retrieved from the database using a created qualifier
+     *
      * @param newQualifier
      */
     public void addQualifier(Qualifier newQualifier) {
-        myQualifers.add(newQualifier);
+        myQualifiers.add(newQualifier);
     }
 
     /**
      * Getter is used when displaying a paper on the screen.
+     *
      * @return any qualifiers associated with the paper
      */
     public ArrayList<Qualifier> getQualifiers() {
-        return myQualifers;
+        return myQualifiers;
+    }
+
+    public String getISBN() {
+        return mISBN;
     }
 
     public String getTitle() {
@@ -223,9 +233,23 @@ public class Paper implements Serializable{
         if (mAuthors != null && mPaperAuthors == null) {
             mPaperAuthors = new ArrayList<>();
             for (String s : mAuthors.split(";")) {
-                mPaperAuthors.add(s.trim());
+                mPaperAuthors.add(s.trim().replaceAll("[\\[\\](){}]]", ""));
+
             }
+        } else if (mPaperAuthors != null) {
+
+            int i = 0;
+            for (String author : mPaperAuthors) {
+                String fAuthor = author.replaceAll("[\\[]", "")
+                        .replaceAll("[\\]]", "")
+                        .trim();
+                mPaperAuthors.set(i++, fAuthor);
+            }
+
+        } else {
+            mPaperAuthors = new ArrayList<>();
         }
+
 
         return mPaperAuthors;
     }
@@ -281,5 +305,13 @@ public class Paper implements Serializable{
     public String getType() {
 
         return mPaperType;
+    }
+
+    public int getPrimaryKey() {
+        return mPrimaryKey;
+    }
+
+    public void setQualifiers(ArrayList<Qualifier> qualifiers) {
+        this.myQualifiers = qualifiers;
     }
 }

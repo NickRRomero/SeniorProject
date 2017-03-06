@@ -17,6 +17,7 @@ public class QualifierProvider extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + QualifierContract.QualifierEntry.TABLE_NAME + " (" +
+                    QualifierContract.QualifierEntry.PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     QualifierContract.QualifierEntry.COLUMN_NAME_TYPE + " TEXT," +
                     QualifierContract.QualifierEntry.COLUMN_NAME_TERM + " TEXT," +
                     QualifierContract.QualifierEntry.COLUMN_NAME_FIELD + " TEXT," +

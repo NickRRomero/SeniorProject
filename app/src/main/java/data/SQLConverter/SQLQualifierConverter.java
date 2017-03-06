@@ -19,6 +19,7 @@ import static data.providers.database.QualifierContract.QualifierEntry.COLUMN_NA
 import static data.providers.database.QualifierContract.QualifierEntry.COLUMN_NAME_FIELD;
 import static data.providers.database.QualifierContract.QualifierEntry.COLUMN_NAME_TERM;
 import static data.providers.database.QualifierContract.QualifierEntry.COLUMN_NAME_TYPE;
+import static data.providers.database.QualifierContract.QualifierEntry.PRIMARY_KEY;
 import static data.providers.database.QualifierContract.QualifierEntry.TABLE_NAME;
 
 /**
@@ -27,11 +28,7 @@ import static data.providers.database.QualifierContract.QualifierEntry.TABLE_NAM
 
 public class SQLQualifierConverter {
 
-    private static final String WHERE = " WHERE ";
 
-    private static final String DELETE_FROM = "DELETE FROM ";
-    private static final String AND = " AND ";
-    private static final String EQUALS = " = ";
     private static SQLQualifierConverter sqlQualifierConverter;
 
     private static QualifierProvider mDbHelper;
@@ -39,13 +36,7 @@ public class SQLQualifierConverter {
     private static SQLiteDatabase mDBWriter;
     private static SQLiteDatabase mDBReader;
 
-    private final String[] projection = {
-            COLUMN_NAME_TYPE,
-            COLUMN_NAME_TERM,
-            QualifierContract.QualifierEntry.COLUMN_NAME_FIELD,
-            COLUMN_NAME_DESCRIPTION,
-            COLUMN_NAME_COLOR
-    };
+
 
     public void removeTable() {
         mDbHelper.dropTable();
@@ -66,6 +57,7 @@ public class SQLQualifierConverter {
     public void addQualiferToDatabase(Qualifier qualifier) {
         ContentValues contentValues = new ContentValues();
 
+        //contentValues.put(PRIMARY_KEY, qualifier.getPrimaryKey());
         contentValues.put(COLUMN_NAME_TYPE, qualifier.getType());
         contentValues.put(COLUMN_NAME_TERM, qualifier.getSearchTerm());
         contentValues.put(COLUMN_NAME_FIELD, qualifier.getCategory());
@@ -84,22 +76,23 @@ public class SQLQualifierConverter {
         Qualifier newQualifier;
         ArrayList<Qualifier> qualifiers = new ArrayList<>();
         String type, term, field, description;
-        int color;
+        int color, col, primary_key;
 
 
         while (cursor.moveToNext()) {
-            long itemid = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_FIELD));
-            type = cursor.getString(0);
-            term = cursor.getString(1);
-            field = cursor.getString(2);
-            description = cursor.getString(3);
-            color = cursor.getInt(4);
+            col = 0;
+            primary_key = cursor.getInt(col++);
+            type = cursor.getString(col++);
+            term = cursor.getString(col++);
+            field = cursor.getString(col++);
+            description = cursor.getString(col++);
+            color = cursor.getInt(col++);
 
 
             if (type.equals("Subscription"))
-                newQualifier = new Subscription(field, term, color);
+                newQualifier = new Subscription(field, term, color, primary_key);
             else
-                newQualifier = new Filter(field, term, color);
+                newQualifier = new Filter(field, term, color, primary_key);
             newQualifier.setDescription(description);
             qualifiers.add(newQualifier);
         }
@@ -115,4 +108,29 @@ public class SQLQualifierConverter {
     }
 
 
+    public Qualifier getQualifierFromDatabase(int qualifer_key) {
+        String selection = "SELECT * FROM " + TABLE_NAME + " WHERE primary_key = " + qualifer_key;
+        Cursor cursor = mDBWriter.rawQuery(selection, null);
+        String type, term , field, description;
+        Qualifier newQualifier = null;
+        int color, col = 0;
+
+        while (cursor.moveToNext()) {
+
+            qualifer_key = cursor.getInt(col++);
+            type = cursor.getString(col++);
+            term = cursor.getString(col++);
+            field = cursor.getString(col++);
+            description = cursor.getString(col++);
+            color = cursor.getInt(col++);
+            if (type.equals("Subscription"))
+                newQualifier = new Subscription(field, term, color, qualifer_key);
+            else
+                newQualifier = new Filter(field, term, color, qualifer_key);
+            newQualifier.setDescription(description);
+        }
+        return newQualifier;
+
+
+    }
 }

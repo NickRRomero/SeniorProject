@@ -1,31 +1,19 @@
 package com.nickromero.seniorproject.views.adapters;
 
-import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.DownloadListener;
-import android.webkit.URLUtil;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nickromero.seniorproject.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -92,7 +80,8 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                WebView mWebView = (WebView) LayoutInflater.from(mParentFragment.getContext())
+
+                               /* WebView mWebView = (WebView) LayoutInflater.from(mParentFragment.getContext())
                                         .inflate(R.layout.paper_webview, null);
                                 mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
@@ -100,7 +89,7 @@ public class SuggestedPaperAdapter extends RecyclerView.Adapter<SuggestedPaperAd
 
 
 
-                                mWebView.loadUrl(paper.getURL());
+                                mWebView.loadUrl(paper.getURL());*/
                             }
                         })
                         .negativeText("Close")

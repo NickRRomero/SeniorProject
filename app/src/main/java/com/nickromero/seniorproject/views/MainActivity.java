@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Xml;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,11 +28,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import data.SQLConverter.SQLPaperConverter;
+import data.SQLConverter.SQLPaperQualiferConverter;
 import data.models.Paper;
 import data.models.Qualifier;
 import data.SQLConverter.SQLQualifierConverter;
 import data.models.Subscription;
 import data.enums.PaperType;
+import data.models.XMLRoot;
 import data.providers.PaperProvider;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -61,15 +64,17 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     public MainActivity mainActivity;
 
+    private SQLPaperQualiferConverter mPaperQualifierConverter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-
         mainActivity = this;
         mQualifierConverter = SQLQualifierConverter.getInstance(this);
         mPaperConverter = SQLPaperConverter.getInstance(this);
+        mPaperQualifierConverter = SQLPaperQualiferConverter.getInstance(this);
 
 
         setContentView(R.layout.activity_main);
@@ -115,7 +120,9 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         mPaperController.setFragment(mPaperFragments.mSuggestedFragment, PaperType.SUGGESTED);
         mPaperController.loadPapersFromSQLDatabase();
 
-        mQualifiers =  mQualifierConverter.getQualifiersFromDatabase();
+        mQualifiers = mQualifierConverter.getQualifiersFromDatabase();
+
+
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
         mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
 
@@ -179,33 +186,46 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
     }
 
 
-
     @Override
     public void onFinishedButtonClicked(String type, String searchField, String searchTerm,
                                         String description, int color) {
         mGridView.invalidate();
-        Qualifier newQualifier;
-        newQualifier = new Subscription(searchField, searchTerm,
+
+
+        final Qualifier[] newQualifier = new Qualifier[1];
+        newQualifier[0] = new Subscription(searchField, searchTerm,
                 color);
         if (description != null)
-            newQualifier.setDescription(description);
+            newQualifier[0].setDescription(description);
 
-         PaperProvider.getRoot("wang")
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(mPaperController::updateSubscribed,
-                                throwable -> System.out.println(throwable.toString())
-                                , () -> System.out.println("Successful")
+        PaperProvider.getRoot(searchField, searchTerm)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(xmlRoot -> {
 
-                        );
+                            mQualifierConverter.addQualiferToDatabase(newQualifier[0]);
 
 
+                            test(xmlRoot);
 
+                        },
+                        throwable -> System.out.println(throwable.toString())
+                        , () -> System.out.println("Successful")
 
+                );
 
-         mQualifiers.add(newQualifier);
-        ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
-        mQualifierConverter.addQualiferToDatabase(newQualifier);
 
     }
+
+    private void test(XMLRoot xmlRoot) {
+        mQualifiers = mQualifierConverter.getQualifiersFromDatabase();
+
+        Qualifier newQualifier = mQualifiers.get(mQualifiers.size() - 1);
+        mQualifiers.add(newQualifier);
+        ((BaseAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+        mPaperController.updateSubscribed(xmlRoot, newQualifier);
+
+
+    }
+
 
 }

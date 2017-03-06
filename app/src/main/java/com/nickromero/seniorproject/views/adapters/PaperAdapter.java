@@ -71,21 +71,34 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
     }
 
     public void addItem(Paper paper) {
-        mPapers.add(paper);
-        notifyItemInserted(mPapers.size() - 1);
-       // notifyDataSetChanged();
+        if (!mPapers.contains(paper)) {
+            System.out.println("HERE");
+            mPapers.add(paper);
+            notifyItemInserted(mPapers.size() - 1);
+            notifyDataSetChanged();
+        }
     }
 
     public void addItems(List<Paper> papers) {
         for (Paper paper : papers)
-            mPapers.add(paper);
+            addItem(paper);
         notifyDataSetChanged();
     }
+
+    public void removeAllItems() {
+        mPapers.clear();
+        notifyDataSetChanged();
+
+    }
+
+
 
     public Paper getItem(int position) {
 
         return mPapers.get(position);
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -123,7 +136,10 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
             mPapersAuthors = (LinearLayout) itemView.findViewById(R.id.authors);
             mPaperTitle = (TextView) itemView.findViewById(R.id.title);
 
+
             mSubscriptionHolder = (GridLayout) itemView.findViewById(R.id.colors);
+
+
             mSubscriptionHolder.setColumnCount(4);
             mSubscriptionHolder.setRowCount(2);
             itemView.setOnClickListener(this);
@@ -155,14 +171,16 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
             mPaper = paper;
             mPapersPosition = position;
 
-
-
+            mSubscriptionHolder.invalidate();
+            mSubscriptionHolder.removeAllViews();
             int idarr[] = {R.id.author1, R.id.author2, R.id.author3};
             int i = 0;
 
             for (i = 0; i < mPaper.getAuthors().size() && i < 3; i++) {
-                ((TextView) mPapersAuthors.findViewById(idarr[i]))
-                        .setText(mPaper.getAuthors().get(i));
+                if (mPapersAuthors.findViewById(idarr[i]) != null) {
+                    ((TextView) mPapersAuthors.findViewById(idarr[i]))
+                            .setText(mPaper.getAuthors().get(i));
+                }
             }
             while (i < 3) {
                 mPapersAuthors.removeView(

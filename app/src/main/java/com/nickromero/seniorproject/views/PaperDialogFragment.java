@@ -59,7 +59,7 @@ public class PaperDialogFragment extends DialogFragment {
         args.putSerializable("whichDialog", whichDialogToShow);
         args.putSerializable("paper", paper);
         args.putSerializable("position", paperPosition);
-        System.out.println("Paper : " + paperPosition);
+
         newFragment.setArguments(args);
 
         mFragmentActivity = parentActivity;
@@ -121,7 +121,7 @@ public class PaperDialogFragment extends DialogFragment {
             @Override
 
             public void onClick(DialogInterface dialogInterface, int i) {
-                System.out.println(mWhichDialogToShow);
+
                 if (mWhichDialogToShow == 0)
                     deletePaperDialogClick();
                 if (mWhichDialogToShow == 1)
