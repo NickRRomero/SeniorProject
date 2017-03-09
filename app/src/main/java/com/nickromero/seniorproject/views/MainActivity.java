@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        mPaperController = PaperController.getInstance(getApplicationContext());
+        mPaperController = new PaperController().getInstance(getApplicationContext());
 
 
         mPaperController.setAdapter(new PaperAdapter(new ArrayList<Paper>(),

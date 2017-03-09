@@ -24,34 +24,30 @@ import data.enums.PaperType;
  */
 public class SubscribedPaperFragment extends Fragment implements PaperContract.View {
 
-    private static final String MY_PAGE = "Saved";
-
-    private PaperAdapter mAdapter;
-
     private final int SPAN_COUNT = 3;
 
     private ArrayList<Paper> mPapersList;
 
     private RecyclerView mRecyclerView;
 
-    private GridLayoutManager mGridLayoutManager;
-
     private PaperContract.Presenter mPresenter;
 
-
-    public static SubscribedPaperFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(MY_PAGE, page);
-        SubscribedPaperFragment fragment = new SubscribedPaperFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    /**
+     * Super class call
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Super class call to create a view for this paper
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -59,15 +55,13 @@ public class SubscribedPaperFragment extends Fragment implements PaperContract.V
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSubscribedFragment);
 
-
-        mGridLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         mRecyclerView.setAdapter(PaperController.mSubscribedAdapter);
 
         mPresenter = new PaperPresenter(this);
-
 
         return rootView;
     }
@@ -93,34 +87,41 @@ public class SubscribedPaperFragment extends Fragment implements PaperContract.V
         mPresenter.unsubscribe();
     }
 
-
+    /**
+     * Called when the user selects an action in the Paper dialog
+     * @param requestCode
+     * @param resultCode which option was selcted
+     * @param data information about the paper that was clicked
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == PaperRequestCodes.MOVE_TO_SAVED.getVal()) {
 
 
-            PaperController.getInstance(getContext()).addToSavedAdapter(
-                    data.getIntExtra("position", -1),
-                    PaperType.SUBSCRIBED);
+            new PaperController().getInstance(getContext()).addToSavedAdapter(
+                    data.getIntExtra("position", -1));
 
         }
         else if (resultCode == PaperRequestCodes.DELETE_PAPER.getVal()) {
-            PaperController.getInstance(getContext()).removeFromAdapter(data.getIntExtra("position", -1),
+            new PaperController().getInstance(getContext()).removeFromAdapter(data.getIntExtra("position", -1),
                     PaperType.SUBSCRIBED);
         }
     }
 
-    public void attachAdapter(PaperAdapter adapter) {
-        mRecyclerView.setAdapter(adapter);
-
-    }
-
+    /**
+     * Update the subscribed adapter with the new paper
+     * @param papers
+     */
     @Override
     public void updatePapers(List<Paper> papers) {
-        PaperController.getInstance(getContext()).addToSubscribedAdapter(papers);
+        new PaperController().getInstance(getContext()).addToSubscribedAdapter(papers);
     }
 
+    /**
+     * Set the presenter for this class. Handles calls from RetroFit
+     * @param presenter new presenter
+     */
     @Override
     public void setPresenter(PaperContract.Presenter presenter) {
         mPresenter = presenter;

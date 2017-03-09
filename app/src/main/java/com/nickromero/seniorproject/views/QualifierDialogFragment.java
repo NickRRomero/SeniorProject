@@ -57,12 +57,6 @@ public class QualifierDialogFragment extends DialogFragment {
     static QualifierDialogFragment newInstance(QualifierDialogInterface dialogInterface) {
         QualifierDialogFragment f = new QualifierDialogFragment();
         mDialogInterafce = dialogInterface;
-
-        // Supply num input as an argument.
-        //Bundle args = new Bundle();
-        //args.putInt("num", num);
-        //f.setArguments(args);
-
         return f;
     }
 

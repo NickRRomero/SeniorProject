@@ -20,67 +20,74 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 /**
  * Created by nickromero on 12/23/16.
  */
+
+/**
+ * A SuggestedPaperFragment handles display an endless list of papers searched for by the user.
+ * The class is a listview that constantly updates itself with new papers as the user scrolls.
+ */
 public class SuggestedPaperFragment extends Fragment {
 
-    private static final String MY_PAGE = "Saved";
-
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-
-    private PaperAdapter mAdapter;
-
+    public static final int ITEMS_COUNT = 15;
+    /**
+     * Current number of papers
+     */
     private int paperCount = 0;
 
+    /**
+     * Scroll listener to display an endless amount of queried papers
+     */
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    /**
+     * View to hold the papers
+     */
     private RecyclerView mRecyclerView;
 
-    private LinearLayoutManager mLinearLayoutManager;
-
-    private static final String MY_SUGGESTED_PAGE = "Suggested";
-
+    /**
+     * Search bar for the user to enter a search term
+     */
     private EditText searchBarText;
 
-    private ImageView searchBarIcon;
-
+    /**
+     * Controller to be used to save papers from the suggested fragment
+     */
     private static PaperController mPaperController;
 
-
+    /**
+     * Current searched term
+     */
     private String currentSearchTerm;
 
-    public static SuggestedPaperFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(MY_SUGGESTED_PAGE, page);
-        SuggestedPaperFragment fragment = new SuggestedPaperFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    /**
+     * Super class call to create a view for this paper
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.suggested_fragment_view, container, false);
 
-        mPaperController = PaperController.getInstance(getContext());
+        mPaperController = new PaperController().getInstance(getContext());
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSuggestedFragment);
 
-        mLinearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
 
         searchBarText = (EditText) rootView.findViewById(R.id.searchEditText);
 
-        searchBarIcon = (ImageView) rootView.findViewById(R.id.searchBarIcon);
-        searchBarIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentSearchTerm = searchBarText.getText().toString();
-                if (!currentSearchTerm.isEmpty()) {
-                    scrollListener.onLoadMore(0, 15, mRecyclerView);
-                }
-
+        ImageView searchBarIcon = (ImageView) rootView.findViewById(R.id.searchBarIcon);
+        searchBarIcon.setOnClickListener(v -> {
+            currentSearchTerm = searchBarText.getText().toString();
+            if (!currentSearchTerm.isEmpty()) {
+                scrollListener.onLoadMore(0, ITEMS_COUNT, mRecyclerView);
             }
         });
 
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+        //Handles the endless scrolling and updating of papers
         scrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -100,7 +107,6 @@ public class SuggestedPaperFragment extends Fragment {
         mRecyclerView.setAdapter(PaperController.mSuggestedAdapter);
 
         return rootView;
-
     }
 
 
