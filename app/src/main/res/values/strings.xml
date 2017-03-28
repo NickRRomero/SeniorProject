@@ -52,4 +52,5 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="customized_access_n_to_content">Customized Access  to Content</string>
+    <string name="enter_a_search_term">Enter a search term...</string>
 </resources>

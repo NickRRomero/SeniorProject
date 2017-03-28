@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
     private SQLPaperQualiferConverter mPaperQualifierConverter;
 
+    private QualifierAdapter mQualifierAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,14 +124,13 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
 
         mQualifiers = mQualifierConverter.getQualifiersFromDatabase();
 
-
+        mQualifierAdapter = new QualifierAdapter(this, mQualifiers);
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
-        mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
+        mGridView.setAdapter(mQualifierAdapter);
 
         if (getIntent().getExtras() != null) {
             buildInitialPapers();
         }
-
 
 
     }
@@ -200,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
                 color);
         if (description != null)
             newQualifier[0].setDescription(description);
+        mQualifiers.add(newQualifier[0]);
+        mQualifierAdapter.notifyDataSetChanged();
 
         PaperProvider.getRoot(searchField, searchTerm)
                 .observeOn(AndroidSchedulers.mainThread())

@@ -32,12 +32,14 @@ public class PDFViewer {
     }
 
     public void openPDF(String pathToFile, String fileName, View view) {
+
+
         File pdfToOpen = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 , fileName);
 
-        Log.e("HERE", pdfToOpen.toString());
+
         Uri path = Uri.fromFile(pdfToOpen);
-        Log.e("HERE", path.toString());
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
         intent.setDataAndType(Uri.fromFile(pdfToOpen), "application/pdf");

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nickromero.seniorproject.R;
 import com.nickromero.seniorproject.views.PaperDialogFragment;
@@ -265,8 +266,19 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
          */
         @Override
         public void onClick(View view) {
-            PDFViewer viewer = new PDFViewer();
-            viewer.openPDF("", (String) view.findViewById(R.id.title).getTag(), view);
+
+            if (view.findViewById(R.id.md_title) != null) {
+                String paperTitle = (String) view.findViewById(R.id.md_title).getTag();
+                PDFViewer viewer = new PDFViewer();
+                viewer.openPDF("", paperTitle, view);
+
+            }
+            else
+            {
+                CharSequence paperMissingText = "File not found.";
+                Toast toast = Toast.makeText(mContext, paperMissingText, Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     }
 }

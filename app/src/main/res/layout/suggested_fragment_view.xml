@@ -18,6 +18,7 @@
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/enter_a_search_term"
                 android:layout_marginEnd="30dp"/>
 
             <ImageView
@@ -27,6 +28,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:paddingEnd="8dp"
+                android:paddingStart="8dp"
                 android:src="@drawable/ic_search_black_24dp"/>
 
         </RelativeLayout>
