@@ -38,7 +38,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Customized Access\n to Content"
+                android:text="@string/customized_access_n_to_content"
                 android:textAlignment="center"
                 android:paddingBottom="24dp"
                 android:textSize="40sp"/>
@@ -54,6 +54,7 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
+                    android:enabled="false"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -72,10 +73,16 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
+                    android:enabled="false"
                     />
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click Sign In"
+                android:layout_gravity="center_horizontal"/>
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"

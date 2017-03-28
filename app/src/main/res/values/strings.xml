@@ -51,4 +51,5 @@
     <string name="qualifier_dialog_title">Delete Qualifier?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="customized_access_n_to_content">Customized Access  to Content</string>
 </resources>

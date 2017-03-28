@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //c.removeTable();
+
 
     }
 

@@ -38,7 +38,8 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via email/password. Currently this is not set up to use
+ * the IEEE account credentials. Just clicking the login button will take you to the next screen
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -154,7 +155,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
+        Intent loginIntent = new Intent(this, IntroActivity.class);
+        startActivity(loginIntent);
+        /*
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -194,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Intent loginIntent = new Intent(this, IntroActivity.class);
             startActivity(loginIntent);
 
-        }
+        }*/
     }
 
     private boolean isEmailValid(String email) {
