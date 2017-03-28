@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nickromero.seniorproject.R;
+import com.nickromero.seniorproject.views.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
+    private static final String SHARED_PREFERENCES_NAME = "CATC_PREFS";
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -55,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    public static final String FIRST_TIME = "first_time";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -155,8 +160,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-        Intent loginIntent = new Intent(this, IntroActivity.class);
-        startActivity(loginIntent);
+
+        if (isFirstTimeRunningApplication()) {
+            Intent loginIntent = new Intent(this, IntroActivity.class);
+            startActivity(loginIntent);
+        }
+        else
+        {
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
+        }
         /*
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -208,6 +221,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
+    }
+
+    private boolean isFirstTimeRunningApplication() {
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
+
+        if (settings.getBoolean(FIRST_TIME, true)) {
+            //First time using application. Send the user to the intro activity
+            settings.edit().putBoolean(FIRST_TIME, false).apply();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

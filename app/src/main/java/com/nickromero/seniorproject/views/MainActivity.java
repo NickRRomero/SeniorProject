@@ -126,7 +126,10 @@ public class MainActivity extends AppCompatActivity implements QualifierDialogIn
         mGridView = (GridView) findViewById(R.id.createdSubscriptions);
         mGridView.setAdapter(new QualifierAdapter(this, mQualifiers));
 
-        buildInitialPapers();
+        if (getIntent().getExtras() != null) {
+            buildInitialPapers();
+        }
+
 
 
     }
