@@ -23,7 +23,7 @@
             android:textAlignment="textStart"
             android:paddingBottom="24dp"
             android:paddingStart="32dp"
-            android:text="This screen will allow you to create a specific Subscription or Filter for your bookshelf. Customized Access to Content uses these 'qualifiers' to automatically fill and filter the papers shown on your bookshelf. "
+            android:text="@string/qualifier_desc"
             android:textColor="@color/icons"
             android:textSize="20sp" />
 
@@ -84,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:hint="@string/searchTerm"
+
                 android:textAlignment="center"
                 android:textSize="30sp" />
 

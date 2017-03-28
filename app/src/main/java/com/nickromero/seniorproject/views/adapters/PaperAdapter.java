@@ -267,6 +267,7 @@ public class PaperAdapter extends RecyclerView.Adapter<PaperAdapter.PaperHolder>
         @Override
         public void onClick(View view) {
 
+            //Check if a paper was actually saved to the device
             if (view.findViewById(R.id.md_title) != null) {
                 String paperTitle = (String) view.findViewById(R.id.md_title).getTag();
                 PDFViewer viewer = new PDFViewer();
