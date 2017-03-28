@@ -2,9 +2,9 @@
 
 Customized Access to Content was developed as a Senior Project in Software Engineering at Cal Poly, San Luis Obispo
 
-Author Nick Romero
+Author: Nick Romero
 
-Advisor Davide Falessi
+Advisor: Davide Falessi
 
 
 ### Developer Dependencies
