@@ -7,7 +7,7 @@ Advisor: Davide Falessi
 
 ## Building
 
-These are some of the necessary tools and steps that you will need to
+These are some of the necessary tools that you will need to
 build the Customized Access to Content Android application on your own machine. These steps will
 work with Windows, macOS, and Linux.
 
